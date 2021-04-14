@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>WebSocket demo</title>
+</head>
+
+<body>
+  Room: <input id="room" type="text"></input>
+  <button onclick="join()">Join</button>
+
+  <br/><br/><br/>
+  <span id="time" style="font-size: 60pt;"></span>
+  <br/>
+  <button onclick="start();">Start</button>
+  <button onclick="stop();">Stop</button>
+  <button onclick="reset();">Reset</button>
+
+  <script>
+    var ws;
+
+    function join() {
+      var room = document.getElementById("room").value;
+      if (room.trim() === "") {
+        alert("Room can't be empty")
+        return;
+      }
+
+      if (ws !== undefined)
+        ws.close();
+      ws = new WebSocket("wss://tobias-reinke.de/shotclock/" + room);
+      ws.onerror = function (error) {
+        console.log(error);
+      };
+      timeSpan = document.getElementById('time');
+      ws.onmessage = function (event) {
+        if (event.data.startsWith('time')) {
+          var time = event.data.split(":")[1];
+          timeSpan.innerHTML = time;
+        }
+      }
+    }
+
+    function start() {
+      ws.send('start');
+    }
+    
+    function stop() {
+      ws.send('stop');
+    }
+
+    function reset() {
+      ws.send('reset');
+    }
+  </script>
+</body>
+
+</html>
