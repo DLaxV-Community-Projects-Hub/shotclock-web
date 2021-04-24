@@ -12,12 +12,13 @@ rooms = {}
 async def time(websocket, path):
   room = path[1:]
   if room not in rooms:
-    rooms[room] = { 'game': 0, 'shotclock': shotclockStart, 'running': False, 'clients': set(), 'active': True }
+    rooms[room] = { 'game': 0, 'shotclock': shotclockStart, 'running': False, 'score': [0, 0], 'active': True, 'clients': set() }
   elif not rooms[room]['active']:
     rooms[room]['active'] = True
     log(room + " reactivated")
   rooms[room]['clients'].add(websocket)
   await sendTimeToClient(websocket, room)
+  await sendScoreToClient(websocket, room)
 
   log(getName(websocket) + ' joined ' + room)
   try:
@@ -30,6 +31,18 @@ async def time(websocket, path):
           stopTimer(room)
         elif message == 'reset':
           await resetTimer(room)
+        elif message == 'goalH+':
+          rooms[room]['score'][0] = rooms[room]['score'][0] + 1
+          await sendScoreToClients(room)
+        elif message == 'goalA+':
+          rooms[room]['score'][1] = rooms[room]['score'][1] + 1
+          await sendScoreToClients(room)
+        elif message == 'goalH-':
+          rooms[room]['score'][0] = max(rooms[room]['score'][0] - 1, 0)
+          await sendScoreToClients(room)
+        elif message == 'goalA-':
+          rooms[room]['score'][1] = max(rooms[room]['score'][1] - 1, 0)
+          await sendScoreToClients(room)
   except:
     disconnected(websocket, room)
 
@@ -83,11 +96,21 @@ async def sendTimeToClients(room):
   for ws in rooms[room]['clients']:
     await sendTimeToClient(ws, room)
 
+async def sendScoreToClients(room):
+  for ws in rooms[room]['clients']:
+    await sendScoreToClient(ws, room)
+
 async def sendTimeToClient(ws, room):
   try:
     shotclock = rooms[room]['shotclock']
     game = rooms[room]['game']
-    await ws.send('g' + str(game) + ';s' + str(shotclock))
+    await ws.send('t' + str(game) + ';' + str(shotclock))
+  except:
+    disconnected(ws, room)
+
+async def sendScoreToClient(ws, room):
+  try:
+    await ws.send('s' + str(rooms[room]['score'][0]) + ';' + str(rooms[room]['score'][1]))
   except:
     disconnected(ws, room)
 
