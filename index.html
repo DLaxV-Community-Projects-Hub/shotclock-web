@@ -2,16 +2,25 @@
 <html>
 
 <head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
   <title>Shotclock</title>
+  <style>
+    .red {
+      color: red;
+    }
+  </style>
 </head>
 
 <body>
   Room: <input id="room" type="text"></input>
   <button onclick="join()">Join</button>
 
-  <br/><br/><br/>
-  <span id="time" style="font-size: 60pt;"></span>
-  <br/>
+  <br /><br /><br />
+  <span id="game" style="font-size: 60pt;"></span>
+  <br />
+  <span id="shotclock" style="font-size: 60pt;"></span>
+  <br />
   <button onclick="start();">Start</button>
   <button onclick="stop();">Stop</button>
   <button onclick="reset();">Reset</button>
@@ -32,19 +41,47 @@
       ws.onerror = function (error) {
         console.log(error);
       };
-      timeSpan = document.getElementById('time');
       ws.onmessage = function (event) {
-        if (event.data.startsWith('time')) {
-          var time = event.data.split(":")[1];
-          timeSpan.innerHTML = time;
-        }
+        var split = event.data.split(";");
+        split.forEach(function (s) {
+          var id = s.substring(0, 1);
+          var time = s.substring(1);
+          var element;
+          switch (id) {
+            case "g":
+              element = document.getElementById('game');
+              var min = String(Math.floor(time / 60)).padStart(2, '0');
+              var sec = String(time % 60).padStart(2, '0');
+              time = min + ":" + sec;
+              break;
+            case "s":
+              if (time == 0)
+                alarm();
+              element = document.getElementById('shotclock');
+              break;
+          }
+          element.innerHTML = time;
+        });
       }
+    }
+
+    function alarm() {
+      var count = 0;
+      var interval = setInterval(function() {
+        var element = document.getElementById('shotclock')
+        if (element.classList.contains('red'))
+          element.classList.remove('red');
+        else
+          element.classList.add('red');
+        if (count++ > 5)
+          clearInterval(interval);
+      }, 10);
     }
 
     function start() {
       ws.send('start');
     }
-    
+
     function stop() {
       ws.send('stop');
     }
