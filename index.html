@@ -40,6 +40,14 @@
   <br />
   <button onclick="goalH(-1);">Goal Home -</button>
   <button onclick="goalA(-1);">Goal Away -</button>
+  <br/>
+  <input id="penalty-team-home" name="penalty-team" type="radio">
+  <label for="penalty-team-home">Home</label>
+  <input id="penalty-team-away" name="penalty-team" type="radio">
+  <label for="penalty-team-away">Away</label>
+  <input id="penalty-player" type="number" placeholder="Player"></input>
+  <input id="penalty-time" type="number" placeholder="Time"></input>
+  <button onclick="penalty();">Penalty</button>
 
   <script>
     var ws;
@@ -146,6 +154,25 @@
         ws.send('goalA+');
       else if (plusminus < 0)
         ws.send('goalA-');
+    }
+
+    function penalty() {
+      var team;
+      if (document.getElementById("penalty-team-home").checked)
+        team = 0;
+      else if (document.getElementById("penalty-team-away").checked)
+        team = 1;
+      else {
+        alert("Please select a team");
+        return;
+      }
+      var player = document.getElementById("penalty-player").value;
+      var time = document.getElementById("penalty-time").value;
+      if (player == "" || time == "") {
+        alert("Please select a player and time");
+        return;
+      }
+      ws.send("p;" + team + ";" + player + ";" + time);
     }
   </script>
 </body>
