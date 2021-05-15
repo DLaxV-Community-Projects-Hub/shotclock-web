@@ -24,6 +24,13 @@
   <br />
   <span id="shotclock" style="font-size: 60pt;"></span>
   <br />
+  <div id="penalties">
+    Penalties Home
+    <ul id="penalties-home"></ul>
+    <br/>
+    Penalties Away
+    <ul id="penalties-away"></ul>
+  </div>
   <button onclick="start();">Start</button>
   <button onclick="stop();">Stop</button>
   <button onclick="reset();">Reset</button>
@@ -52,15 +59,12 @@
       };
       ws.onmessage = function (event) {
         var id = event.data.substring(0, 1);
-        var split = event.data.substring(1).split(";");
+        var data = event.data.substring(2).includes(";") ? event.data.substring(2).split(";") : [ event.data.substring(2) ];
         switch (id) {
           case "t":
-            var game = split[0];
-            var min = String(Math.floor(game / 60)).padStart(2, '0');
-            var sec = String(game % 60).padStart(2, '0');
-            document.getElementById('game').innerHTML = min + ":" + sec;
+            document.getElementById('game').innerHTML = formatTime(data[0]);
 
-            var shotclock = split[1];
+            var shotclock = data[1];
             document.getElementById('shotclock').innerHTML = shotclock;
             if (shotclock == 0)
               alarm();
@@ -68,12 +72,35 @@
               deactivateAlarm();
             break;
           case "s":
-            var score1 = split[0];
-            var score2 = split[1];
+            var score1 = data[0];
+            var score2 = data[1];
             document.getElementById('score').innerHTML = score1 + " - " + score2;
+            break;
+          case "p":
+            document.getElementById("penalties-home").innerHTML = '';
+            document.getElementById("penalties-away").innerHTML = '';
+            if (data == "")
+              return;
+            for (p of data) {
+              var pSplit = p.split(":");
+              var team = pSplit[0];
+              var player = pSplit[1];
+              var time = formatTime(pSplit[2]);
+
+              var ul = document.getElementById(team == 0 ? "penalties-home" : "penalties-away");
+              var li = document.createElement("li");
+              li.appendChild(document.createTextNode("#" + player + " - " + time));
+              ul.appendChild(li);
+            }
             break;
         }
       }
+    }
+
+    function formatTime(secs) {
+      var min = String(Math.floor(secs / 60)).padStart(2, '0');
+      var sec = String(secs % 60).padStart(2, '0');
+      return min + ":" + sec;
     }
 
     var alarmInterval;

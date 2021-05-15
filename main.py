@@ -12,7 +12,15 @@ rooms = {}
 async def time(websocket, path):
   room = path[1:]
   if room not in rooms:
-    rooms[room] = { 'game': 0, 'shotclock': shotclockStart, 'running': False, 'score': [0, 0], 'active': True, 'clients': set() }
+    rooms[room] = { 
+      'active': True,
+      'running': False,
+      'gameTime': 0,
+      'shotclock': shotclockStart,
+      'penalties': [],
+      'score': [0, 0],
+      'clients': set()
+    }
   elif not rooms[room]['active']:
     rooms[room]['active'] = True
     log(room + " reactivated")
@@ -43,6 +51,12 @@ async def time(websocket, path):
         elif message == 'goalA-':
           rooms[room]['score'][1] = max(rooms[room]['score'][1] - 1, 0)
           await sendScoreToClients(room)
+        elif message.startswith("p"):
+          pData = message.split(";")
+          team = int(pData[1])
+          player = int(pData[2])
+          time = int(pData[3])
+          await addPenalty(room, team, player, time)
   except:
     disconnected(websocket, room)
 
@@ -76,13 +90,31 @@ async def startTimer(room):
 
 async def timerThread(room):
   while room in rooms and rooms[room]['running']:
+    # Startzeit für Lautzeitmessung dieser Methode speichern
     t1 = timing.time()
-    rooms[room]['game'] = rooms[room]['game'] + 1
+
+    # Spielzeit +1 Sek
+    rooms[room]['gameTime'] = rooms[room]['gameTime'] + 1
+    
+    # Wenn Shotclock nicht abgelaufen
     if rooms[room]['shotclock'] > 0:
+      # Shotclock -1 Sek
       rooms[room]['shotclock'] = rooms[room]['shotclock'] - 1
+    
+    # Alle Penalties iterieren
+    for p in rooms[room]['penalties']:
+      # Penalty -1 Sek
+      p['time'] = p['time'] - 1
+    # Abgelaufene Penalties löschen
+    rooms[room]['penalties'][:] = [p for p in rooms[room]['penalties'] if p['time'] >= -5]
+
+    # Neue Zeiten senden
     await sendTimeToClients(room)
+
+    # Laufzeit dieser Methode berechnen
     t2 = timing.time()
     diff = t2 - t1
+    # Eine Sekunde minus Methodenlaufzeit bis zum nächsten Aufruf
     await asyncio.sleep(1 - diff)
 
 def stopTimer(room):
@@ -90,6 +122,14 @@ def stopTimer(room):
 
 async def resetTimer(room):
   rooms[room]['shotclock'] = shotclockStart
+  await sendTimeToClients(room)
+
+async def addPenalty(room, team, player, time):
+  rooms[room]['penalties'].append({
+    "team": team,
+    "player": player,
+    "time": time
+  })
   await sendTimeToClients(room)
 
 async def sendTimeToClients(room):
@@ -103,14 +143,28 @@ async def sendScoreToClients(room):
 async def sendTimeToClient(ws, room):
   try:
     shotclock = rooms[room]['shotclock']
-    game = rooms[room]['game']
-    await ws.send('t' + str(game) + ';' + str(shotclock))
+    game = rooms[room]['gameTime']
+    await ws.send('t;' + str(game) + ';' + str(shotclock))
+    await sendPenaltiesToClient(ws, room)
+  except:
+    disconnected(ws, room)
+
+async def sendPenaltiesToClient(ws, room):
+  try:
+    penalties = rooms[room]['penalties']
+    if len(penalties) > 0:
+      msg = 'p'
+      # Wenn min. einer drin ist, der nicht abläuft
+      if any(p['time'] > -5 for p in penalties):
+        for p in penalties:
+          msg = msg + ';' + str(p['team']) + ':' + str(p['player']) + ':' + str(max(p['time'], 0))
+      await ws.send(msg)
   except:
     disconnected(ws, room)
 
 async def sendScoreToClient(ws, room):
   try:
-    await ws.send('s' + str(rooms[room]['score'][0]) + ';' + str(rooms[room]['score'][1]))
+    await ws.send('s;' + str(rooms[room]['score'][0]) + ';' + str(rooms[room]['score'][1]))
   except:
     disconnected(ws, room)
 
