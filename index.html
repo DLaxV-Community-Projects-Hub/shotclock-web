@@ -54,7 +54,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       params = new URLSearchParams(window.location.search);
       room = params.get('room');
-      if (room !== undefined)
+      if (room !== undefined && room !== null)
         join(room);
     }, false);
 
