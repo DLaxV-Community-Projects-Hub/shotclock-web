@@ -52,14 +52,18 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      console.log(window.location.search);
-      //params = new URLSearchParams(window.location.search);
+      params = new URLSearchParams(window.location.search);
+      room = params.get('room');
+      if (room !== undefined)
+        join(room);
     }, false);
 
     var ws;
 
-    function join() {
-      var room = document.getElementById("room").value;
+    function join(room = undefined) {
+      if (room == undefined) {
+        room = document.getElementById("room").value;
+      }
       if (room.trim() === "") {
         alert("Room can't be empty")
         return;
