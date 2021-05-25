@@ -71,6 +71,7 @@ def disconnected(ws, room):
   clients.remove(ws)
   rooms[room]['clients'] = clients
   if len(rooms[room]['clients']) == 0 and rooms[room]['active']:
+    stopTimer(room)
     rooms[room]['active'] = False
     log(room + ' deactivated')
     Timer(300.0, deleteRoom, (room,)).start()
