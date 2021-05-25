@@ -5,7 +5,8 @@
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
   <title>Shotclock</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
   <style>
     .red {
       color: red;
@@ -27,7 +28,7 @@
   <div id="penalties">
     Penalties Home
     <ul id="penalties-home"></ul>
-    <br/>
+    <br />
     Penalties Away
     <ul id="penalties-away"></ul>
   </div>
@@ -40,7 +41,7 @@
   <br />
   <button onclick="goalH(-1);">Goal Home -</button>
   <button onclick="goalA(-1);">Goal Away -</button>
-  <br/>
+  <br />
   <input id="penalty-team-home" name="penalty-team" type="radio">
   <label for="penalty-team-home">Home</label>
   <input id="penalty-team-away" name="penalty-team" type="radio">
@@ -50,6 +51,11 @@
   <button onclick="penalty();">Penalty</button>
 
   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      console.log(window.location.search);
+      //params = new URLSearchParams(window.location.search);
+    }, false);
+
     var ws;
 
     function join() {
@@ -67,7 +73,7 @@
       };
       ws.onmessage = function (event) {
         var id = event.data.substring(0, 1);
-        var data = event.data.substring(2).includes(";") ? event.data.substring(2).split(";") : [ event.data.substring(2) ];
+        var data = event.data.substring(2).includes(";") ? event.data.substring(2).split(";") : [event.data.substring(2)];
         switch (id) {
           case "t":
             document.getElementById('game').innerHTML = formatTime(data[0]);
