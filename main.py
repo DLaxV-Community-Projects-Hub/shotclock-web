@@ -2,6 +2,7 @@ import asyncio
 from datetime import datetime
 import random
 import websockets
+from websockets.protocol import State
 import time as timing
 from threading import Thread
 from threading import Timer
@@ -31,6 +32,9 @@ async def time(websocket, path):
   log(getName(websocket) + ' joined ' + room)
   try:
     while True:
+      if websocket.state == State.CLOSED:
+        disconnected(websocket, room)
+        break
       async for message in websocket:
         log(getName(websocket) + '@' + room + ': ' + message)
         if message == 'start':
@@ -66,15 +70,16 @@ def getName(ws):
   return websocket.remote_address[0]
 
 def disconnected(ws, room):
-  log(getName(ws) + ' left ' + room)
-  clients = rooms[room]['clients'].copy()
-  clients.remove(ws)
-  rooms[room]['clients'] = clients
-  if len(rooms[room]['clients']) == 0 and rooms[room]['active']:
-    stopTimer(room)
-    rooms[room]['active'] = False
-    log(room + ' deactivated')
-    Timer(300.0, deleteRoom, (room,)).start()
+  if ws in rooms[room]['clients']:
+    log(getName(ws) + ' left ' + room)
+    clients = rooms[room]['clients'].copy()
+    clients.remove(ws)
+    rooms[room]['clients'] = clients
+    if len(rooms[room]['clients']) == 0 and rooms[room]['active']:
+      stopTimer(room)
+      rooms[room]['active'] = False
+      log(room + ' deactivated')
+      Timer(300.0, deleteRoom, (room,)).start()
 
 def deleteRoom(room):
   if not rooms[room]['active']:
