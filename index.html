@@ -26,16 +26,19 @@
 <body>
 
   <div id="container">
-    <div id="input" class="mb">
+    <div id="input" class="mb" style="text-align: center;">
       Room: <input id="room" type="text"></input>
-      <button onclick="changeQR()">Create QR-Code</button>
+      <button onclick="changeQR()">Create</button>
+      <br /><br />
+      <span>Rooms are deleted 24 hours after they get created or after the last user leaves it (whichever happens
+        last)</span>
     </div>
     <div id="qr" class="mb"></div>
     <div class="mb">
       <a id="url-room" href=""></a>
     </div>
     <div class="mb">
-      <span id="control-text" style="display: none; text-align: center;">Controls: <br/></span>
+      <span id="control-text" style="display: none; text-align: center;">Controls: <br /></span>
       <a id="url-control" href=""></a>
     </div>
   </div>
@@ -65,7 +68,7 @@
 
     var qrcode;
     function setQR(url) {
-      var size = Math.min(window.innerWidth, window.innerHeight) / 4;
+      var size = Math.min(window.innerWidth, window.innerHeight) / 2;
       if (qrcode === undefined) {
         qrcode = new QRCode("qr", {
           text: url,
