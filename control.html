@@ -45,7 +45,8 @@
     text-align: center;
   }
 
-  #control #startstop, #control #reset {
+  #control #startstop,
+  #control #reset {
     width: 25vmax;
     height: 15vmin;
     font-size: 5vmin;
@@ -67,9 +68,9 @@
     <span id="shotclock"></span>
     <div id="control">
       <button id="startstop" onclick="startstop();">START/STOP</button>
-      <br/>
+      <br />
       <button id="reset" onclick="reset();">RESET</button>
-      <br/><br/>
+      <br /><br />
       <button id="startpage" onclick="startpage();">Startpage</button>
     </div>
 </body>
@@ -125,6 +126,7 @@
   var alarmInterval;
   function alarm() {
     if (alarmInterval === undefined) {
+      beep();
       alarmInterval = setInterval(function () {
         var element = document.getElementById('shotclock');
         if (element.classList.contains('red'))
@@ -141,6 +143,22 @@
       alarmInterval = undefined;
     }
     document.getElementById('shotclock').classList.remove('red');
+  }
+
+  var audio;
+  function beep() {
+    audio = new Audio("beep.mp3");
+    audio.play();
+    setTimeout(function () {
+      stopBeep()
+    }, 2000);
+  }
+
+  function stopBeep() {
+    if (audio !== undefined) {
+      audio.pause();
+      audio.load();
+    }
   }
 </script>
 

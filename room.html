@@ -86,6 +86,7 @@
   var alarmInterval;
   function alarm() {
     if (alarmInterval === undefined) {
+      beep();
       alarmInterval = setInterval(function () {
         var element = document.getElementById('shotclock');
         if (element.classList.contains('red'))
@@ -102,6 +103,22 @@
       alarmInterval = undefined;
     }
     document.getElementById('shotclock').classList.remove('red');
+  }
+
+  var audio;
+  function beep() {
+    audio = new Audio("beep.mp3");
+    audio.play();
+    setTimeout(function () {
+      stopBeep()
+    }, 2000);
+  }
+
+  function stopBeep() {
+    if (audio !== undefined) {
+      audio.pause();
+      audio.load();
+    }
   }
 </script>
 
