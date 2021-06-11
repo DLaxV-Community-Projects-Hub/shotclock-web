@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shotclock</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
+</head>
+
+<style>
+  @font-face {
+    font-family: 'SevenSeg';
+    font-style: normal;
+    src: url("digital-7-mono.woff2") format('woff2'), url("digital-7-mono.woff") format('woff');
+  }
+
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  #shotclock {
+    font-family: 'SevenSeg';
+    font-size: 100vmin;
+  }
+
+  .red {
+    color: red;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <span id="shotclock"></span>
+  </div>
+</body>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    params = new URLSearchParams(window.location.search);
+    room = params.get('r');
+    if (room !== undefined && room !== null && room.trim() !== "")
+      join(room);
+    else
+      alert("No room defined")
+  }, false);
+
+  var ws;
+
+  function join(room = undefined) {
+    if (ws !== undefined)
+      ws.close();
+    ws = new WebSocket("wss://tobias-reinke.de/shotclock/" + room);
+    ws.onerror = function (error) {
+      console.log(error);
+    };
+    ws.onmessage = function (event) {
+      var id = event.data.substring(0, 1);
+      var data = event.data.substring(2).includes(";") ? event.data.substring(2).split(";") : [event.data.substring(2)];
+      switch (id) {
+        case "t":
+          var shotclock = data[1];
+          document.getElementById('shotclock').innerHTML = shotclock;
+          if (shotclock == 0)
+            alarm();
+          else
+            deactivateAlarm();
+          break;
+      }
+    }
+  }
+
+  var alarmInterval;
+  function alarm() {
+    if (alarmInterval === undefined) {
+      alarmInterval = setInterval(function () {
+        var element = document.getElementById('shotclock');
+        if (element.classList.contains('red'))
+          element.classList.remove('red');
+        else
+          element.classList.add('red');
+      }, 500);
+    }
+  }
+
+  function deactivateAlarm() {
+    if (alarmInterval !== undefined) {
+      clearInterval(alarmInterval);
+      alarmInterval = undefined;
+    }
+    document.getElementById('shotclock').classList.remove('red');
+  }
+</script>
+
+</html>

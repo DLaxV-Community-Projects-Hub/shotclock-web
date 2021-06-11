@@ -41,6 +41,11 @@ async def time(websocket, path):
           await startTimer(room)
         elif message == 'stop':
           stopTimer(room)
+        elif message == 'startstop':
+          if rooms[room]['running']:
+            stopTimer(room)
+          else:
+            await startTimer(room)
         elif message == 'reset':
           await resetTimer(room)
         elif message == 'goalH+':
@@ -79,7 +84,7 @@ def disconnected(ws, room):
       stopTimer(room)
       rooms[room]['active'] = False
       log(room + ' deactivated')
-      Timer(300.0, deleteRoom, (room,)).start()
+      Timer(86400.0, deleteRoom, (room,)).start()
 
 def deleteRoom(room):
   if not rooms[room]['active']:

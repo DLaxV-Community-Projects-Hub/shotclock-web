@@ -1,188 +1,83 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 
 <head>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shotclock</title>
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
+  <script type="application/javascript" src="qrcode.min.js"></script>
   <style>
-    .red {
-      color: red;
+    #container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+    }
+
+    .mb {
+      margin-bottom: 1vh;
     }
   </style>
 </head>
 
 <body>
-  Room: <input id="room" type="text"></input>
-  <button onclick="join()">Join</button>
 
-  <br /><br /><br />
-  <span id="score" style="font-size: 60pt;"></span>
-  <br />
-  <span id="game" style="font-size: 60pt;"></span>
-  <br />
-  <span id="shotclock" style="font-size: 60pt;"></span>
-  <br />
-  <div id="penalties">
-    Penalties Home
-    <ul id="penalties-home"></ul>
-    <br />
-    Penalties Away
-    <ul id="penalties-away"></ul>
+  <div id="container">
+    <div id="input" class="mb">
+      Room: <input id="room" type="text"></input>
+      <button onclick="changeQR()">Create QR-Code</button>
+    </div>
+    <div id="qr" class="mb"></div>
+    <div class="mb">
+      <a id="url-room" href=""></a>
+    </div>
+    <div class="mb">
+      <span id="control-text" style="display: none; text-align: center;">Controls: <br/></span>
+      <a id="url-control" href=""></a>
+    </div>
   </div>
-  <button onclick="start();">Start</button>
-  <button onclick="stop();">Stop</button>
-  <button onclick="reset();">Reset</button>
-  <br />
-  <button onclick="goalH(1);">Goal Home +</button>
-  <button onclick="goalA(1);">Goal Away +</button>
-  <br />
-  <button onclick="goalH(-1);">Goal Home -</button>
-  <button onclick="goalA(-1);">Goal Away -</button>
-  <br />
-  <input id="penalty-team-home" name="penalty-team" type="radio">
-  <label for="penalty-team-home">Home</label>
-  <input id="penalty-team-away" name="penalty-team" type="radio">
-  <label for="penalty-team-away">Away</label>
-  <input id="penalty-player" type="number" placeholder="Player"></input>
-  <input id="penalty-time" type="number" placeholder="Time"></input>
-  <button onclick="penalty();">Penalty</button>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      params = new URLSearchParams(window.location.search);
-      room = params.get('room');
-      if (room !== undefined && room !== null)
-        join(room);
-    }, false);
-
-    var ws;
-
-    function join(room = undefined) {
-      if (room == undefined) {
-        room = document.getElementById("room").value;
-      }
-      if (room.trim() === "") {
-        alert("Room can't be empty")
-        return;
-      }
-
-      if (ws !== undefined)
-        ws.close();
-      ws = new WebSocket("wss://tobias-reinke.de/shotclock/" + room);
-      ws.onerror = function (error) {
-        console.log(error);
-      };
-      ws.onmessage = function (event) {
-        var id = event.data.substring(0, 1);
-        var data = event.data.substring(2).includes(";") ? event.data.substring(2).split(";") : [event.data.substring(2)];
-        switch (id) {
-          case "t":
-            document.getElementById('game').innerHTML = formatTime(data[0]);
-
-            var shotclock = data[1];
-            document.getElementById('shotclock').innerHTML = shotclock;
-            if (shotclock == 0)
-              alarm();
-            else
-              deactivateAlarm();
-            break;
-          case "s":
-            var score1 = data[0];
-            var score2 = data[1];
-            document.getElementById('score').innerHTML = score1 + " - " + score2;
-            break;
-          case "p":
-            document.getElementById("penalties-home").innerHTML = '';
-            document.getElementById("penalties-away").innerHTML = '';
-            if (data == "")
-              return;
-            for (p of data) {
-              var pSplit = p.split(":");
-              var team = pSplit[0];
-              var player = pSplit[1];
-              var time = formatTime(pSplit[2]);
-
-              var ul = document.getElementById(team == 0 ? "penalties-home" : "penalties-away");
-              var li = document.createElement("li");
-              li.appendChild(document.createTextNode("#" + player + " - " + time));
-              ul.appendChild(li);
-            }
-            break;
-        }
+    function changeQR() {
+      var room = document.getElementById("room").value;
+      if (room !== undefined && room !== null && room.trim() !== "") {
+        var url = createRoomURL(room);
+        setQR(url);
+        document.getElementById("url-room").innerHTML = url;
+        document.getElementById("url-room").href = url;
+        var controlUrl = createControlURL(room);
+        document.getElementById("control-text").style.display = "block";
+        document.getElementById("url-control").innerHTML = controlUrl;
+        document.getElementById("url-control").href = controlUrl;
       }
     }
 
-    function formatTime(secs) {
-      var min = String(Math.floor(secs / 60)).padStart(2, '0');
-      var sec = String(secs % 60).padStart(2, '0');
-      return min + ":" + sec;
+    function createRoomURL(room) {
+      return "https://tobi.re/shotclock/room.html?r=" + room;
     }
 
-    var alarmInterval;
-    function alarm() {
-      if (alarmInterval === undefined) {
-        alarmInterval = setInterval(function () {
-          var element = document.getElementById('shotclock');
-          if (element.classList.contains('red'))
-            element.classList.remove('red');
-          else
-            element.classList.add('red');
-        }, 500);
+    function createControlURL(room) {
+      return "https://tobi.re/shotclock/control.html?r=" + room;
+    }
+
+    var qrcode;
+    function setQR(url) {
+      var size = Math.min(window.innerWidth, window.innerHeight) / 4;
+      if (qrcode === undefined) {
+        qrcode = new QRCode("qr", {
+          text: url,
+          width: size,
+          height: size,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      } else {
+        qrcode.makeCode(url);
       }
-    }
-
-    function deactivateAlarm() {
-      if (alarmInterval !== undefined) {
-        clearInterval(alarmInterval);
-        alarmInterval = undefined;
-      }
-      document.getElementById('shotclock').classList.remove('red');
-    }
-
-    function start() {
-      ws.send('start');
-    }
-    function stop() {
-      ws.send('stop');
-    }
-    function reset() {
-      deactivateAlarm();
-      ws.send('reset');
-    }
-
-    function goalH(plusminus) {
-      if (plusminus > 0)
-        ws.send('goalH+');
-      else if (plusminus < 0)
-        ws.send('goalH-');
-    }
-    function goalA(plusminus) {
-      if (plusminus > 0)
-        ws.send('goalA+');
-      else if (plusminus < 0)
-        ws.send('goalA-');
-    }
-
-    function penalty() {
-      var team;
-      if (document.getElementById("penalty-team-home").checked)
-        team = 0;
-      else if (document.getElementById("penalty-team-away").checked)
-        team = 1;
-      else {
-        alert("Please select a team");
-        return;
-      }
-      var player = document.getElementById("penalty-player").value;
-      var time = document.getElementById("penalty-time").value;
-      if (player == "" || time == "") {
-        alert("Please select a player and time");
-        return;
-      }
-      ws.send("p;" + team + ";" + player + ";" + time);
     }
   </script>
 </body>
