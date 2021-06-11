@@ -20,41 +20,69 @@
     .mb {
       margin-bottom: 1vh;
     }
+
+    .mb2 {
+      margin-bottom: 5vh;
+    }
+
+    .center {
+      text-align: center;
+    }
   </style>
 </head>
 
 <body>
 
   <div id="container">
-    <div id="input" class="mb" style="text-align: center;">
+    <div class="mb center">
+      <span>All users within the same room will see the same shotclock countdown.</span>
+      <br />
+      <span>Enter a room name and click the button to create links and a QR code to join the room.</span>
+    </div>
+    <div id="input" class="mb center">
       Room: <input id="room" type="text"></input>
-      <button onclick="changeQR()">Create</button>
+      <button onclick="create()">Create</button>
       <br /><br />
       <span>Rooms are deleted 24 hours after they get created or after the last user leaves it (whichever happens
         last)</span>
     </div>
     <div id="qr" class="mb"></div>
-    <div class="mb">
+    <div id="room-url" class="mb2 center" style="display: none;">
       <a id="url-room" href=""></a>
+      <br /><br />
+      <button onclick="copyRoomURL();">Copy room URL</button>
     </div>
-    <div class="mb">
-      <span id="control-text" style="display: none; text-align: center;">Controls: <br /></span>
+    <div id="control-url" class="mb center" style="display: none;">
+      <span id="control-text">Controls: <br /></span>
       <a id="url-control" href=""></a>
+      <br /><br />
+      <button onclick="openControls();">Open Controls</button>
     </div>
   </div>
 
   <script>
-    function changeQR() {
+    document.addEventListener('DOMContentLoaded', function () {
+      params = new URLSearchParams(window.location.search);
+      room = params.get('r');
+      if (room !== undefined && room !== null && room.trim() !== "")
+        document.getElementById("room").value = room;
+      create();
+    }, false);
+
+    function create() {
       var room = document.getElementById("room").value;
       if (room !== undefined && room !== null && room.trim() !== "") {
         var url = createRoomURL(room);
         setQR(url);
         document.getElementById("url-room").innerHTML = url;
         document.getElementById("url-room").href = url;
+        document.getElementById("room-url").style.display = "block";
+
         var controlUrl = createControlURL(room);
-        document.getElementById("control-text").style.display = "block";
         document.getElementById("url-control").innerHTML = controlUrl;
         document.getElementById("url-control").href = controlUrl;
+
+        document.getElementById("control-url").style.display = "block";
       }
     }
 
@@ -82,6 +110,27 @@
         qrcode.makeCode(url);
       }
     }
+
+    function copyRoomURL() {
+      var room = document.getElementById("room").value;
+      if (room !== undefined && room !== null && room.trim() !== "")
+        copyToClipboard(createRoomURL(room));
+    }
+
+    function openControls() {
+      var room = document.getElementById("room").value;
+      if (room !== undefined && room !== null && room.trim() !== "")
+        window.location.href = createControlURL(room);
+    }
+
+    const copyToClipboard = str => {
+      const el = document.createElement('textarea');
+      el.value = str;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    };
   </script>
 </body>
 
