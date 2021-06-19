@@ -31,6 +31,11 @@
       font-size: 3vmax;
     }
 
+    #logo span span.beta {
+      font-size: 1vmax;
+      vertical-align: top;
+    }
+
     .mb {
       margin-bottom: 1vmax;
     }
@@ -185,20 +190,33 @@
           d="M268.52,19.83l-14-10.6,2-4.17c.55-1.17.92-1.9,1.11-2.21a7.4,7.4,0,0,1,1.2-1.53,5.23,5.23,0,0,1,1.48-1,5.61,5.61,0,0,1,1.8-.46,6.89,6.89,0,0,1,2.05.12,10.25,10.25,0,0,1,2.26.77,11.08,11.08,0,0,1,4,3.07,9.73,9.73,0,0,1,1.95,3.86,8.09,8.09,0,0,1-.05,3.49,16.28,16.28,0,0,1-1.21,3.17Zm-.73-4.9.76-1.62a11.31,11.31,0,0,0,1-2.64,4,4,0,0,0-.12-1.83,7.65,7.65,0,0,0-1.54-2.67,8.86,8.86,0,0,0-3.05-2.24,5.18,5.18,0,0,0-2.74-.64,2.86,2.86,0,0,0-1.72.8A6.9,6.9,0,0,0,259.25,6l-.88,1.85Z"
           transform="translate(266.28 273.3)"></path>
       </svg>
-      <span>Shotclock</span>
+      <span>Shotclock <span class="beta">BETA</span>
+      </span>
     </div>
 
-    <div class="mb center">
-      <span>All users within the same room will see the same shotclock countdown.</span>
-      <br />
-      <span>Enter a room name and click the button to create links and a QR code to join the room.</span>
+    <div id="info" class="mb2 center">
+      Willkommen auf der DLaxV Online Shot Clock Seite!<br/>
+      Hier können Räume erstellt werden in denen allen Nutzern im selben Raum die gleiche Shotclockzeit angezeigt wird.<br/>
+      Der Raumname muss eindeutig gewählt werden, sonst kommt es zu Kollisionen mit anderen Nutzern.<br/>
+      Vorschlag: Heimteam-Gegner-Uhrzeit<br/>
+      <br/>
+      Auf der Startseite können durch Eingabe eines Raumnamens und Klick auf den Button "Create" die Steuerungs-URL und ein QR-Code für die Raum-URL generiert werden.<br/>
+      <br/>
+      Die jeweiligen Teams, Trainer*innen, Zuschauer*innen können über die Raum-URL oder den QR-Code dem Raum beitreten und die Shotclock, die für das Spiel gilt, sehen.<br/>
+      Die Shotclock kann auf allen Endgeräten mit Internetbrowser und Zugang zum Internet angezeigt werden.<br/>
+      <br/>
+      Über die Control-URL kann die Shotclock über die dort vorhandenen Buttons gesteuert werden.<br/>
+      Eine mögliche Bildschirmsperre oder Bildschirmschonerzeit des Endgeräts sollte dementsprechend angepasst werden, damit die Seite aktiv bleibt.<br/>
+      Die Audioausgabe (Piepton) bei Ablauf der Uhr ist aus technischen Gründen nur möglich, wenn vom Nutzer mit der Seite interagiert wird.<br/>
+      Also entweder auf der Steuerungs-Seite oder auf der Raum-Seite, wenn dort einmal irgendwo in die Seite geklickt wird.<br/>
+      <br/>
+      Es empfiehlt sich einen Lautsprecher (z.B. Bluetooth-Box) an das Gerät, auf dem die Shotclock gesteuert wird, anzuschließen um von dort den Piepton für alle Anwesenden abzuspielen.<br/>
     </div>
     <div id="input" class="mb center">
       Room: <input id="room" type="text"></input>
       <button onclick="create()">Create</button>
       <br /><br />
-      <span>Rooms are deleted 24 hours after they get created or after the last user leaves it (whichever happens
-        last)</span>
+      <span>Räume werden 24 Stunden nachdem der letzte Nutzer diesen Verlassen hat und kein weiterer Nutzer beigetreten ist gelöscht</span>
     </div>
     <div id="qr" class="mb"></div>
     <div id="room-url" class="mb2 center" style="display: none;">
@@ -237,6 +255,8 @@
         document.getElementById("url-control").href = controlUrl;
 
         document.getElementById("control-url").style.display = "block";
+
+        document.getElementById("info").style.display = "none";
       }
     }
 
