@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DLaxV Shotclock</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
+  <link href="bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: rgb(158, 158, 158);
+      background: radial-gradient(circle, rgba(158, 158, 158, 1) 0%, rgba(117, 117, 117, 1) 35%, rgba(66, 66, 66, 1) 100%);
+    }
+
+    #logos img {
+      height: 7.5vmax;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="p-5 text-center">
+    <div class="d-flex flex-column justify-content-center align-items-center h-100">
+      <div class="text-white mb-2">
+        <h1 class="mb-3">DLaxV Shotclock</h1>
+        <h5 class="mb-4">Free & Open Source online Shotclock application</h5>
+        <input id="room" type="text" class="form-control" placeholder="Room Name">
+        <button id="createButton" class="btn btn-outline-light btn-lg m-2" role="button" onclick="create();">Create
+          Room</a>
+      </div>
+      <div class="mb-2">
+        <div id="qr" class="mb-1 mt-1"></div>
+      </div>
+      <div id="supported-by" class="mt-5">
+        <h4 class="text-white mb-4">Supported by</h4>
+        <div id="logos" class="d-flex flex-row align-items-center">
+          <div id="logo-dlaxv" class="mx-3">
+            <img src="img/logo-dlaxv.svg" alt="Logo DLaxV">
+          </div>
+          <div id="logo-worldlacrosse" class="mx-3">
+            <img src="img/logo-worldlacrosse.svg" alt="Logo World Lacrosse">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="bootstrap.bundle.min.js"></script>
+  <script type="application/javascript" src="qrcode.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      params = new URLSearchParams(window.location.search);
+      room = params.get('r');
+      if (room !== undefined && room !== null && room.trim() !== "")
+        document.getElementById("room").value = room;
+      create(false);
+    });
+
+    let createButtonTimeoutId;
+    function create(showPopover = true) {
+      var room = $('#room').val();
+      if (room !== undefined && room !== null && room.trim() !== "") {
+        $('#createButton').popover('hide');
+        var url = createRoomURL(room);
+        setQR(url);
+        $('#url-room').val(url);
+        $('#url-room').attr("href", url);
+        $('#room-url').show();
+
+        var controlUrl = createControlURL(room);
+        $('#url-control').val(controlUrl);
+        $('#url-control').attr("href", controlUrl);
+        $('#control-url').show();
+
+        $('#info').hide();
+      } else if (showPopover) {
+        clearTimeout(createButtonTimeoutId);
+        $('#createButton').popover({
+          content: "Please define a room name",
+          trigger: 'manual'
+        });
+        $('#createButton').popover('show');
+        createButtonTimeoutId = setTimeout(function () {
+          $('#createButton').popover('hide');
+        }, 3000);
+      }
+    }
+
+    function createRoomURL(room) {
+      return "https://shotclock.dlaxv.de/room.html?r=" + room;
+    }
+
+    function createControlURL(room) {
+      return "https://shotclock.dlaxv.de/control.html?r=" + room;
+    }
+
+    var qrcode;
+    function setQR(url) {
+      var size = Math.min(window.innerWidth, window.innerHeight) / 4;
+      if (qrcode === undefined) {
+        qrcode = new QRCode("qr", {
+          text: url,
+          width: size,
+          height: size,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      } else {
+        qrcode.makeCode(url);
+      }
+    }
+
+    function copyRoomURL() {
+      var room = $('#room').val();
+      if (room !== undefined && room !== null && room.trim() !== "")
+        copyToClipboard(createRoomURL(room));
+    }
+
+    function openControls() {
+      var room = $('#room').val();
+      if (room !== undefined && room !== null && room.trim() !== "")
+        window.location.href = createControlURL(room);
+    }
+
+    const copyToClipboard = str => {
+      const el = document.createElement('textarea');
+      el.value = str;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    };
+  </script>
+</body>
+
+</html>
