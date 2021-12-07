@@ -18,6 +18,11 @@
     #logos img {
       height: 7.5vmax;
     }
+
+    .a-button {
+      color: inherit;
+      text-decoration: none;
+    }
   </style>
 </head>
 
@@ -28,11 +33,27 @@
         <h1 class="mb-3">DLaxV Shotclock</h1>
         <h5 class="mb-4">Free & Open Source online Shotclock application</h5>
         <input id="room" type="text" class="form-control" placeholder="Room Name">
+        <button id="infoButton" class="btn btn-outline-light btn-lg m-2" role="button" data-bs-toggle="modal"
+          data-bs-target="#infoModal">Info / How To</button>
         <button id="createButton" class="btn btn-outline-light btn-lg m-2" role="button" onclick="create();">Create
-          Room</a>
+          Room</button>
       </div>
-      <div class="mb-2">
-        <div id="qr" class="mb-1 mt-1"></div>
+      <div id="room-info" class="mb-2 d-flex flex-row d-none">
+        <div id="qr" class="mx-1 my-1"></div>
+        <div id="room-buttons" class="d-flex flex-column justify-content-around mx-1">
+          <div class="d-flex flex-column">
+            <a id="url-room" class="btn btn-outline-light btn-md my-1" role="button" target="_blank"
+              href="https://shotclock.dlaxv.de/room.html?r=">Open Room</a>
+            <button id="copy-url-room" class="btn btn-outline-light btn-md" role="button" onclick="copyRoomURL();">Copy
+              Room URL</button>
+          </div>
+          <div class="d-flex flex-column">
+            <a id="url-control" class="btn btn-outline-light btn-md my-1" role="button" target="_blank"
+              href="https://shotclock.dlaxv.de/control.html?r=">Open Control</a>
+            <button id="copy-url-control" class="btn btn-outline-light btn-md" role="button"
+              onclick="copyControlURL();">Copy Control URL</button>
+          </div>
+        </div>
       </div>
       <div id="supported-by" class="mt-5">
         <h4 class="text-white mb-4">Supported by</h4>
@@ -43,6 +64,62 @@
           <div id="logo-worldlacrosse" class="mx-3">
             <img src="img/logo-worldlacrosse.svg" alt="Logo World Lacrosse">
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Modal -->
+  <div id="infoModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="infoModalLabel">Info / How To Online Shotclock</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Willkommen auf der DLaxV Online Shot Clock Seite!
+          <br />
+          Hier können Räume erstellt werden in denen allen Nutzern im selben Raum die gleiche Shotclockzeit angezeigt
+          wird.
+          <br />
+          Der Raumname muss eindeutig gewählt werden, sonst kommt es zu Kollisionen mit anderen Nutzern.
+          Vorschlag: <b>Heimteam-Gegner-Uhrzeit</b>
+
+          <br /><br />
+          Auf der Startseite kann durch Eingabe eines Raumnamens und Klick auf den Button <b>Create Room</b> ein Raum
+          erstellt werden.
+          Folgende Informationen werden anschließend angezeigt:
+          <ul>
+            <li>Button zum Öffnen des Raums</li>
+            <li>Button zum Kopieren der Raum-URL</li>
+            <li>Button zum Öffnen Steuerungseite des Raums</li>
+            <li>Button zum Kopieren der Steuerungs-URL</li>
+            <li>QR-Code zur Raum-URL</li>
+          </ul>
+          Die jeweiligen Teams, Trainer*innen, Zuschauer*innen können über die Raum-URL oder den QR-Code dem Raum
+          beitreten und die Shotclock, die für das Spiel gilt, sehen.
+          Die Shotclock kann auf allen Endgeräten mit Internetbrowser und Zugang zum Internet angezeigt werden.
+
+          <br /><br />
+          Auf der Steuerungsseite kann die Shotclock über die dort vorhandenen Buttons gesteuert werden.
+          <br />
+          Eine mögliche Bildschirmsperre oder Bildschirmschonerzeit des Endgeräts sollte dementsprechend angepasst
+          werden, damit die Seite aktiv bleibt.
+
+          <br /><br />
+          Die Audioausgabe (Piepton) bei Ablauf der Uhr ist aus technischen Gründen nur möglich, wenn vom Nutzer mit der
+          Seite interagiert wird.
+          Also entweder auf der Steuerungs-Seite oder auf der Raum-Seite, wenn dort einmal irgendwo in die Seite
+          geklickt wird.
+          <br />
+          Es empfiehlt sich einen Lautsprecher (z.B. Bluetooth-Box) an das Gerät, auf dem die Shotclock gesteuert wird,
+          anzuschließen um von dort den Piepton für alle Anwesenden abzuspielen.
+
+          <hr />
+          <h3>Beispielhaftes Setup</h3>
+          <img src="img/instructions.svg" alt="Instructional image for device setup" class="w-100" />
         </div>
       </div>
     </div>
@@ -66,19 +143,19 @@
     function create(showPopover = true) {
       var room = $('#room').val();
       if (room !== undefined && room !== null && room.trim() !== "") {
+        // Room-Info zeigen
+        $('#room-info').removeClass('d-none');
+
+        // Popover auf Create Button deaktivieren
         $('#createButton').popover('hide');
+
+        // Buttons und QR-Code bestücken
         var url = createRoomURL(room);
         setQR(url);
-        $('#url-room').val(url);
         $('#url-room').attr("href", url);
-        $('#room-url').show();
 
         var controlUrl = createControlURL(room);
-        $('#url-control').val(controlUrl);
         $('#url-control').attr("href", controlUrl);
-        $('#control-url').show();
-
-        $('#info').hide();
       } else if (showPopover) {
         clearTimeout(createButtonTimeoutId);
         $('#createButton').popover({
@@ -89,6 +166,34 @@
         createButtonTimeoutId = setTimeout(function () {
           $('#createButton').popover('hide');
         }, 3000);
+      }
+    }
+
+    function copyRoomURL() {
+      var room = $('#room').val();
+      if (room !== undefined && room !== null && room.trim() !== "") {
+        navigator.clipboard.writeText(createRoomURL(room));
+        $('#copy-url-room').popover({
+          content: "Copied!",
+        });
+        $('#copy-url-room').popover('show');
+        setTimeout(function () {
+          $('#copy-url-room').popover('hide');
+        }, 1000);
+      }
+    }
+
+    function copyControlURL() {
+      var room = $('#room').val();
+      if (room !== undefined && room !== null && room.trim() !== "") {
+        navigator.clipboard.writeText(createControlURL(room));
+        $('#copy-url-control').popover({
+          content: "Copied!",
+        });
+        $('#copy-url-control').popover('show');
+        setTimeout(function () {
+          $('#copy-url-control').popover('hide');
+        }, 1000);
       }
     }
 
@@ -117,26 +222,11 @@
       }
     }
 
-    function copyRoomURL() {
-      var room = $('#room').val();
-      if (room !== undefined && room !== null && room.trim() !== "")
-        copyToClipboard(createRoomURL(room));
-    }
-
     function openControls() {
       var room = $('#room').val();
       if (room !== undefined && room !== null && room.trim() !== "")
         window.location.href = createControlURL(room);
     }
-
-    const copyToClipboard = str => {
-      const el = document.createElement('textarea');
-      el.value = str;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-    };
   </script>
 </body>
 
