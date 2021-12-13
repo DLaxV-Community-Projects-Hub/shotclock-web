@@ -81,6 +81,11 @@
           break;
       }
     }
+
+    // Disable screen lock
+    if ('wakeLock' in navigator) {
+      navigator.wakeLock.request();
+    }
   }
 
   var alarmInterval;

@@ -109,6 +109,11 @@
           break;
       }
     }
+
+    // Disable screen lock
+    if ('wakeLock' in navigator) {
+      navigator.wakeLock.request();
+    }
   }
 
   function startstop() {
