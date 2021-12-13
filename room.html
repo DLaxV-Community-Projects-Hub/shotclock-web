@@ -84,7 +84,13 @@
 
     // Disable screen lock
     if ('wakeLock' in navigator) {
-      navigator.wakeLock.request();
+      try {
+        navigator.wakeLock.request();
+      } catch (e) {
+        console.err(e);
+      }
+    } else {
+      console.log("wakeLock not supported")
     }
   }
 
