@@ -8,338 +8,227 @@
   <title>DLaxV Shotclock</title>
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
-  <script type="application/javascript" src="qrcode.min.js"></script>
+  <link href="bootstrap.min.css" rel="stylesheet">
   <style>
-    #container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-evenly;
+    body {
+      background: rgb(158, 158, 158);
+      background: radial-gradient(circle, rgba(158, 158, 158, 1) 0%, rgba(117, 117, 117, 1) 35%, rgba(66, 66, 66, 1) 100%);
     }
 
-    #logo {
-      display: flex;
-      align-items: center;
+    #logos img {
+      height: 7.5vmax;
     }
 
-    #logo svg {
-      height: 10vmax;
-      margin-right: 1vmin;
-    }
-
-    #logo span {
-      font-size: 3vmax;
-    }
-
-    #logo span span.beta {
-      font-size: 1vmax;
-      vertical-align: top;
-    }
-
-    .mb {
-      margin-bottom: 1vmax;
-    }
-
-    .mb2 {
-      margin-bottom: 5vh;
-    }
-
-    .center {
-      text-align: center;
+    .a-button {
+      color: inherit;
+      text-decoration: none;
     }
   </style>
 </head>
 
 <body>
-
-  <div id="container">
-    <div id="logo" class="mb">
-      <svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 588.91 806">
-        <defs>
-          <style>
-            .cla-1 {
-              fill: #bbbdbf;
-            }
-
-            .cla-2 {
-              fill: #fff;
-            }
-
-            .cla-3 {
-              fill: red;
-            }
-
-            .cla-4 {
-              fill: #ffad00;
-            }
-
-            .cla-5 {
-              fill: #fcb415;
-            }
-          </style>
-        </defs>
-        <path class="cla-1"
-          d="M28.17,532.69c40.81,0,77.66-27.14,98.58-72.62L290.59,103.88c23.27-50.59,32-94.71,32-132.52,0-51.41-16.26-91.1-34.33-119.33"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-1"
-          d="M288.3-148C238.75-225.28,139.08-273.3,28.17-273.3s-210.57,48-260.11,125.36c-31.37,49-57.24,132.37-2.3,251.82L-70.4,460.07c20.92,45.48,57.78,72.62,98.57,72.62"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2" d="M28.17,522.65c36.79,0,70.2-25,89.44-66.8L281.44,99.68c53-115.31,28.42-195.37-1.61-242.23"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M279.83-142.55C232.09-217,135.68-263.25,28.17-263.25S-175.75-217-223.48-142.52c-30,46.83-54.65,126.92-1.61,242.2L-61.25,455.85c19.22,41.83,52.66,66.8,89.42,66.8"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-3"
-          d="M120.57-170.52l-14.4,28.81c-14,3.36-38.91,12.08-56.4,30.9-7.2-.57-14.4-.9-21.61-.9-117.24,0-234.43,77.53-238.37,215.67l-4.21-9.15c-62.89-155.2,88.09-277.89,242.58-277.89A344.42,344.42,0,0,1,120.57-170.52Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-4" d="M290.56-92.9a7,7,0,0,1,.38,1.09C290.85-92.09,290.7-92.47,290.56-92.9Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-4"
-          d="M290.56-92.9c-4.93-13-37.48-88.19-121-88.19-13.6,0-49,10.57-49,10.57a344.42,344.42,0,0,0-92.41-12.56c-154.49,0-305.47,122.69-242.58,277.89-100.76-219,70.94-346.32,242.58-346.32C142.37-251.51,256.63-195.12,290.56-92.9Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-1"
-          d="M-63.89,41.39a101,101,0,0,0,92.06,59.37A101.08,101.08,0,0,0,129.27-.29a102.09,102.09,0,0,0-3.64-26.87,37.9,37.9,0,0,0-9-6.7,97.69,97.69,0,0,1,3.66,26.53A98.55,98.55,0,0,1,21.75,91.2,98.47,98.47,0,0,1-63.89,41.39"
-          transform="translate(266.28 273.3)"></path>
-        <path
-          d="M-9.68,499.87c40,24.45,90.36,8.18,116.63-48.93L244.64,151.56l26.15-56.77C304.08,22.35,307.63-40,291.2-91.11"
-          transform="translate(266.28 273.3)"></path>
-        <path
-          d="M291.2-91.11c-1.36-4.19-32.38-90-121.66-90-13.61,0-48.94,10.54-48.94,10.54l-14.43,28.82c-16.58,4-48.39,15.44-65.1,42.13-21.53,34.46-2.15,86.05-2.15,86.05C51-39.16,73.45-49.5,93.52-49.5c34.59,0,46.07,27.88,46.07,49.21A111.43,111.43,0,0,1,28.17,111.13,111.43,111.43,0,0,1-83.24-.29,111.43,111.43,0,0,1,28.17-111.72c-117.23,0-234.44,77.52-238.39,215.65L-189.94,148s.4.94,1.19,2.63l31.43-61A422,422,0,0,0-134,152.21l-28.47,55.44c10.41,22.65,22.85,49.67,35.6,77.38l31-62.13c11.55,18.77,24.26,37.63,38,56.31l-37.16,74.85C-77.91,391.6-63,424-55.6,440.09l48.34-97.67c15.9,18.17,32.61,35.82,49.86,52.69L-9.68,499.87"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-5"
-          d="M28.83,326.7l10.44-22.24c2.94-6.28,7.44-14.14,13.36-17.07,8.45-4.18,17.26-.37,24.28,4.95,10.51,8,16.51,17.54,15.25,31-.7,6.8-3.7,13.21-5.42,16.86L76.23,362.61,28.83,326.7m45.3,14.05,2.94-6.28c4.48-9.74,3.65-18.78-7.37-27.14-14.39-10.89-20,1.08-22.08,5.52l-2.77,5.72Z"
-          transform="translate(266.28 273.3)"></path>
-        <polyline class="cla-5"
-          points="324.79 536.78 331.74 521.97 369.82 550.81 380.91 527.18 390.23 534.25 372.19 572.68 324.79 536.78">
-        </polyline>
-        <path class="cla-5"
-          d="M102.5,216.52l5.55-11.82,38,10.05-5.15,10.95-7.45-2.37-6.58,14,5.21,7.17-4.55,9.69-25-37.68m24.08,4.65-15.33-5.51-.07.15,10.94,14.86Z"
-          transform="translate(266.28 273.3)"></path>
-        <polyline class="cla-5"
-          points="422.24 470.92 416.61 482.9 405.85 455.72 383.78 456.65 389.99 443.43 403.71 444.04 396.89 428.73 402.42 416.94 412.02 442.06 436.04 441.5 429.88 454.62 414.23 453.74 422.24 470.92">
-        </polyline>
-        <polyline class="cla-5"
-          points="390.85 403.19 398.42 387.08 438.38 401.13 409.95 362.5 416.77 347.98 455.16 403.07 446.99 420.5 390.85 403.19">
-        </polyline>
-        <path class="cla-2"
-          d="M98.62,378.44l-14-10.6,2-4.17c.55-1.17.92-1.9,1.11-2.21A7.11,7.11,0,0,1,89,359.93a5.09,5.09,0,0,1,1.48-1,5.55,5.55,0,0,1,1.79-.46,7,7,0,0,1,2.06.12,10.17,10.17,0,0,1,2.25.77,11.21,11.21,0,0,1,4,3.07,9.71,9.71,0,0,1,1.94,3.86,8.09,8.09,0,0,1,0,3.49,16.28,16.28,0,0,1-1.21,3.17Zm-.74-4.9.77-1.62a11.64,11.64,0,0,0,1-2.64,3.82,3.82,0,0,0-.12-1.83A7.46,7.46,0,0,0,98,364.78a9,9,0,0,0-3.06-2.24,5.17,5.17,0,0,0-2.73-.64,2.86,2.86,0,0,0-1.73.8,7.17,7.17,0,0,0-1.12,1.86l-.88,1.85Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M106,362.85,92,352.27l5.45-11.5,2.33,1.77-3.93,8.3,3.17,2.41,3.8-8,2.34,1.77-3.8,8,3.75,3,4.27-9,2.33,1.78Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M98.88,337.81l1.51-3.18,7.59,5.74,1.86,1.42a4,4,0,0,0,.48.27,2.16,2.16,0,0,0,1.84.05,3.15,3.15,0,0,0,1.52-1.67,4.24,4.24,0,0,0,.47-2.11,3.25,3.25,0,0,0-.74-1.77,15,15,0,0,0-2.52-2.21l-7.62-5.8,1.5-3.18,7.65,5.79a18.21,18.21,0,0,1,3.48,3.23,6.39,6.39,0,0,1,1.26,3.3,7.93,7.93,0,0,1-.89,4.16,6.5,6.5,0,0,1-3.29,3.52,4.89,4.89,0,0,1-4.09-.18,6.7,6.7,0,0,1-.91-.52c-.21-.13-.79-.56-1.75-1.28Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2" d="M123.45,326l-1.51,3.2-11.63-8.83-2.15,4.55-2.34-1.77L111.61,311l2.33,1.76-2.12,4.49Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M121.73,316.66l1.28-3.11a3.71,3.71,0,0,0,2.19.43c.77-.2,1.46-.93,2-2.19a3.92,3.92,0,0,0,.51-2.53,1.87,1.87,0,0,0-1-1.34,1.6,1.6,0,0,0-1.43,0,11.83,11.83,0,0,0-2.18,1.66,23.07,23.07,0,0,1-2.55,2,4.17,4.17,0,0,1-2,.66,4.35,4.35,0,0,1-2.18-.45,4.63,4.63,0,0,1-2.58-3,6.52,6.52,0,0,1,.66-4.71,6.94,6.94,0,0,1,3.28-3.62,5.23,5.23,0,0,1,4.18,0l-1.31,3.12a2.76,2.76,0,0,0-2.08,0,4.32,4.32,0,0,0-2,3.86,1.66,1.66,0,0,0,.91,1.12,1.5,1.5,0,0,0,1.34,0,11.4,11.4,0,0,0,2.31-1.72,13.94,13.94,0,0,1,3.49-2.52,4,4,0,0,1,3.23.2,5.05,5.05,0,0,1,2.74,3.29,7.3,7.3,0,0,1-.69,5.21,9,9,0,0,1-2.32,3.14,4.58,4.58,0,0,1-2.84,1.19A6.36,6.36,0,0,1,121.73,316.66Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M133.11,291.21l2-3a9.11,9.11,0,0,1,2.65,4.72,8,8,0,0,1-.71,5.06,6.39,6.39,0,0,1-3.82,3.64,7.8,7.8,0,0,1-5.73-.76,12,12,0,0,1-4.33-3.36,8.7,8.7,0,0,1-1.94-4.57,8.58,8.58,0,0,1,.8-4.7,6.62,6.62,0,0,1,3.27-3.43,6.14,6.14,0,0,1,4.55-.09l-1.16,3.2a3.57,3.57,0,0,0-2.42.05,3.19,3.19,0,0,0-1.52,1.64,4.68,4.68,0,0,0-.37,2.85,5.94,5.94,0,0,0,1.64,3,10,10,0,0,0,3.09,2.31,4.68,4.68,0,0,0,3.3.47,3.16,3.16,0,0,0,2.07-1.75,4,4,0,0,0,.27-2.65A5.24,5.24,0,0,0,133.11,291.21Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M138.92,275.47l-2.84,6,6.24,4.74-1.51,3.19-14-10.59,1.51-3.19,5.39,4.09,2.85-6-5.39-4.09,1.5-3.19,14,10.58-1.51,3.2Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M148.19,273.8l-14-10.58,5.45-11.5,2.33,1.77-3.93,8.3,3.17,2.41,3.8-8,2.34,1.77-3.8,8,3.75,3,4.27-9,2.33,1.78Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M156.58,256.1l-1.51,3.19-14-10.59,3.26-6.89a9.18,9.18,0,0,1,1.68-2.59,3.48,3.48,0,0,1,2.09-1,4.8,4.8,0,0,1,2.65.51,5.07,5.07,0,0,1,2.7,2.73,6.26,6.26,0,0,1-.11,4.34,6.92,6.92,0,0,1,2-.47,41.67,41.67,0,0,1,6.27.06L160,248.85c-1-.14-2.62-.24-4.86-.32a5.25,5.25,0,0,0-2.68.44,3.36,3.36,0,0,0-1.06,1.44l-.61,1.3Zm-7.88-6,.8-1.69a13.37,13.37,0,0,0,1.31-3.55,3,3,0,0,0-.34-1.78,2.49,2.49,0,0,0-1.15-1.12,1.54,1.54,0,0,0-1.59.08,4.58,4.58,0,0,0-1.12,1.71l-1.67,3.51Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2" d="M165.34,237.61l-14-10.59,1.51-3.19,11.64,8.82,3.73-7.89,2.34,1.77Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M173,212.69,170,218.83l2.54,3.49L171,225.6l-11.35-16.12,1.68-3.54,16.7,4.83-1.44,3Zm-2.77-.83-6.66-2.06,4.46,6.7Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M178.72,195l2-3a9.17,9.17,0,0,1,2.66,4.72,8,8,0,0,1-.71,5.06,6.41,6.41,0,0,1-3.82,3.64,7.8,7.8,0,0,1-5.73-.76,11.93,11.93,0,0,1-4.33-3.36,8.79,8.79,0,0,1-1.95-4.57,8.68,8.68,0,0,1,.81-4.7,6.62,6.62,0,0,1,3.27-3.43,6.11,6.11,0,0,1,4.54-.09l-1.15,3.2a3.57,3.57,0,0,0-2.42.05,3.25,3.25,0,0,0-1.53,1.64,4.67,4.67,0,0,0-.36,2.85,6,6,0,0,0,1.64,3,10.14,10.14,0,0,0,3.09,2.3,4.68,4.68,0,0,0,3.3.47,3.21,3.21,0,0,0,2.07-1.75,4,4,0,0,0,.27-2.65A5.24,5.24,0,0,0,178.72,195Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M187.93,189.93l-1.51,3.19-14-10.59,3.27-6.89a9,9,0,0,1,1.67-2.59,3.45,3.45,0,0,1,2.1-1,4.76,4.76,0,0,1,2.64.51,5.07,5.07,0,0,1,2.7,2.73,6.31,6.31,0,0,1-.1,4.34,6.54,6.54,0,0,1,2-.47,42.81,42.81,0,0,1,6.27.05l-1.63,3.43c-1-.14-2.62-.25-4.86-.32a5.25,5.25,0,0,0-2.68.44,3.29,3.29,0,0,0-1,1.44l-.62,1.3Zm-7.88-6,.8-1.69a12.92,12.92,0,0,0,1.31-3.56,3,3,0,0,0-.33-1.77,2.61,2.61,0,0,0-1.15-1.13,1.58,1.58,0,0,0-1.6.09A4.58,4.58,0,0,0,178,177.6l-1.66,3.51Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M188.19,173.66a12.63,12.63,0,0,1-2.7-1.79,11.4,11.4,0,0,1-2.76-3.32,8.86,8.86,0,0,1-1.06-3.92,9.09,9.09,0,0,1,1-4.24,7,7,0,0,1,4-3.8,7.1,7.1,0,0,1,5.57.48,11.46,11.46,0,0,1,4.2,3.4,9.46,9.46,0,0,1,2.05,4.8,9.12,9.12,0,0,1-.88,5.06,7,7,0,0,1-2.71,3.17,6.06,6.06,0,0,1-3.42.93A8.47,8.47,0,0,1,188.19,173.66Zm1.43-3.19a4.24,4.24,0,0,0,3.14.3,3.62,3.62,0,0,0,2.29-2.05,4.64,4.64,0,0,0,.33-2.88,7,7,0,0,0-1.65-3.19,9.09,9.09,0,0,0-3-2.38,4.46,4.46,0,0,0-3.34-.37,3.62,3.62,0,0,0-2.23,2,4.87,4.87,0,0,0,.38,4.83A9.25,9.25,0,0,0,189.62,170.47Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M197,157.83l1.28-3.11a3.78,3.78,0,0,0,2.19.43,3.66,3.66,0,0,0,2-2.19,4.08,4.08,0,0,0,.51-2.53,1.85,1.85,0,0,0-1-1.34,1.62,1.62,0,0,0-1.44,0,12.15,12.15,0,0,0-2.17,1.67,24.92,24.92,0,0,1-2.56,2,4.09,4.09,0,0,1-4.16.21,4.63,4.63,0,0,1-2.57-2.95,6.54,6.54,0,0,1,.65-4.72,7,7,0,0,1,3.28-3.62,5.26,5.26,0,0,1,4.19,0l-1.31,3.13a2.75,2.75,0,0,0-2.09,0,3.36,3.36,0,0,0-1.55,1.75,3.32,3.32,0,0,0-.43,2.11,1.57,1.57,0,0,0,.91,1.12,1.54,1.54,0,0,0,1.34,0,11.85,11.85,0,0,0,2.3-1.72,14.31,14.31,0,0,1,3.49-2.52,4,4,0,0,1,3.23.2,5,5,0,0,1,2.74,3.28,7.2,7.2,0,0,1-.69,5.21,9.21,9.21,0,0,1-2.31,3.15,4.56,4.56,0,0,1-2.85,1.18A6.31,6.31,0,0,1,197,157.83Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M203.83,143.38l1.28-3.11a3.71,3.71,0,0,0,2.19.43c.78-.2,1.46-.93,2-2.19a3.93,3.93,0,0,0,.51-2.53,1.85,1.85,0,0,0-1-1.34,1.63,1.63,0,0,0-1.43,0,12.61,12.61,0,0,0-2.18,1.67,23.07,23.07,0,0,1-2.55,2,4.28,4.28,0,0,1-2,.66,4.35,4.35,0,0,1-2.18-.45,4.65,4.65,0,0,1-2.58-3,6.52,6.52,0,0,1,.66-4.71,6.94,6.94,0,0,1,3.28-3.62,5.23,5.23,0,0,1,4.18,0l-1.31,3.12a2.72,2.72,0,0,0-2.08,0,4.32,4.32,0,0,0-2,3.85,1.66,1.66,0,0,0,.91,1.13,1.53,1.53,0,0,0,1.35,0,12.17,12.17,0,0,0,2.3-1.72,13.94,13.94,0,0,1,3.49-2.52,4,4,0,0,1,3.23.2,5,5,0,0,1,2.74,3.28,7.29,7.29,0,0,1-.69,5.21,9,9,0,0,1-2.31,3.15,4.59,4.59,0,0,1-2.85,1.18A6.23,6.23,0,0,1,203.83,143.38Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M215.47,131.8l-14-10.58,5.45-11.5,2.33,1.77-3.93,8.3,3.17,2.41,3.8-8,2.34,1.77-3.8,8,3.74,3,4.28-9,2.33,1.77Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2" d="M228.84,103.59l-1.61,3.4-16.83-4.56,1.51-3.19,12.66,3.59-8.68-12,1.49-3.17Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M232,96.89,218,86.31l5.45-11.5,2.33,1.77-3.93,8.3,3.17,2.41,3.8-8L231.2,81l-3.8,8,3.74,3,4.28-9,2.33,1.78Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M240.4,79.19l-1.51,3.19-14-10.59,3.26-6.89a9.18,9.18,0,0,1,1.68-2.59,3.48,3.48,0,0,1,2.09-1,4.81,4.81,0,0,1,2.65.51,5.07,5.07,0,0,1,2.7,2.73,6.26,6.26,0,0,1-.11,4.34,6.92,6.92,0,0,1,2-.47,41.67,41.67,0,0,1,6.27.06l-1.63,3.42c-1-.14-2.62-.24-4.86-.32a5.23,5.23,0,0,0-2.68.44,3.36,3.36,0,0,0-1.06,1.44l-.61,1.3Zm-7.88-6,.8-1.69A13.37,13.37,0,0,0,234.63,68a3,3,0,0,0-.34-1.78,2.49,2.49,0,0,0-1.15-1.12,1.54,1.54,0,0,0-1.59.08,4.58,4.58,0,0,0-1.12,1.71l-1.67,3.51Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M246.26,66.82l-14-10.59,2.51-5.3a22.18,22.18,0,0,1,1.25-2.36,5.66,5.66,0,0,1,1.55-1.63,3.54,3.54,0,0,1,1.84-.61,4.24,4.24,0,0,1,1.95.42,4,4,0,0,1,1.9,1.78,4.89,4.89,0,0,1,.38,2.9,3.88,3.88,0,0,1,2.05-1.31,3.26,3.26,0,0,1,2.22.23,5.32,5.32,0,0,1,2.27,2,4.9,4.9,0,0,1,.77,3,12.16,12.16,0,0,1-1.26,4.08Zm-6.82-9.49,1.15-2.44a9.61,9.61,0,0,0,.89-2.46,2.2,2.2,0,0,0-.25-1.44,2.16,2.16,0,0,0-1-.9,1.51,1.51,0,0,0-1.13-.12,1.81,1.81,0,0,0-1,.72,14.1,14.1,0,0,0-.86,1.65l-1.18,2.48Zm6.08,4.6L247,58.85a9.58,9.58,0,0,0,1-2.71,2.44,2.44,0,0,0-.32-1.45,2.3,2.3,0,0,0-1-1,1.77,1.77,0,0,0-1.54,0,3.16,3.16,0,0,0-1.41,1.67l-1.8,3.81Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M255.06,39.39l-2.91,6.14L254.7,49l-1.56,3.27L241.79,36.18l1.68-3.54,16.7,4.83-1.44,3Zm-2.77-.84-6.66-2,4.46,6.7Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2" d="M267,23.13l-1.41,3-12.4-.75,9.39,7.11-1.41,3-14-10.59,1.41-3,12.37.72-9.35-7.08,1.4-3Z"
-          transform="translate(266.28 273.3)"></path>
-        <path class="cla-2"
-          d="M268.52,19.83l-14-10.6,2-4.17c.55-1.17.92-1.9,1.11-2.21a7.4,7.4,0,0,1,1.2-1.53,5.23,5.23,0,0,1,1.48-1,5.61,5.61,0,0,1,1.8-.46,6.89,6.89,0,0,1,2.05.12,10.25,10.25,0,0,1,2.26.77,11.08,11.08,0,0,1,4,3.07,9.73,9.73,0,0,1,1.95,3.86,8.09,8.09,0,0,1-.05,3.49,16.28,16.28,0,0,1-1.21,3.17Zm-.73-4.9.76-1.62a11.31,11.31,0,0,0,1-2.64,4,4,0,0,0-.12-1.83,7.65,7.65,0,0,0-1.54-2.67,8.86,8.86,0,0,0-3.05-2.24,5.18,5.18,0,0,0-2.74-.64,2.86,2.86,0,0,0-1.72.8A6.9,6.9,0,0,0,259.25,6l-.88,1.85Z"
-          transform="translate(266.28 273.3)"></path>
-      </svg>
-      <span>Shotclock <span class="beta">BETA</span>
-      </span>
+  <div class="p-5 text-center">
+    <div class="d-flex flex-column justify-content-center align-items-center h-100">
+      <div class="text-white mb-2">
+        <h1 class="mb-3">DLaxV Shotclock</h1>
+        <h5 class="mb-4">Free & Open Source online Shotclock application</h5>
+        <input id="room" type="text" class="form-control" placeholder="Room Name">
+        <button id="infoButton" class="btn btn-outline-light btn-lg m-2" role="button" data-bs-toggle="modal"
+          data-bs-target="#infoModal">Info / How To</button>
+        <button id="createButton" class="btn btn-outline-light btn-lg m-2" role="button" onclick="create();">Create
+          Room</button>
+      </div>
+      <div id="room-info" class="mb-2 d-flex flex-row d-none">
+        <div id="qr" class="mx-1 my-1"></div>
+        <div id="room-buttons" class="d-flex flex-column justify-content-around mx-1">
+          <div class="d-flex flex-column">
+            <a id="url-room" class="btn btn-outline-light btn-md my-1" role="button" target="_blank"
+              href="https://shotclock.dlaxv.de/room.html?r=">Open Room</a>
+            <button id="copy-url-room" class="btn btn-outline-light btn-md" role="button" onclick="copyRoomURL();">Copy
+              Room URL</button>
+          </div>
+          <div class="d-flex flex-column">
+            <a id="url-control" class="btn btn-outline-light btn-md my-1" role="button" target="_blank"
+              href="https://shotclock.dlaxv.de/control.html?r=">Open Control</a>
+            <button id="copy-url-control" class="btn btn-outline-light btn-md" role="button"
+              onclick="copyControlURL();">Copy Control URL</button>
+          </div>
+        </div>
+      </div>
+      <div id="supported-by" class="mt-5">
+        <h4 class="text-white mb-4">Supported by</h4>
+        <div id="logos" class="d-flex flex-row align-items-center">
+          <div id="logo-dlaxv" class="mx-3">
+            <a href="https://dlaxv.de/" target="_blank"><img src="img/logo-dlaxv.svg" alt="Logo DLaxV"></a>
+          </div>
+          <div id="logo-worldlacrosse" class="mx-3">
+            <a href="https://worldlacrosse.sport/" target="_blank"><img src="img/logo-worldlacrosse.svg" alt="Logo World Lacrosse"></a </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div id="info" class="mb2 center">
-      Willkommen auf der DLaxV Online Shot Clock Seite!<br />
-      Hier können Räume erstellt werden in denen allen Nutzern im selben Raum die gleiche Shotclockzeit angezeigt
-      wird.<br />
-      Der Raumname muss eindeutig gewählt werden, sonst kommt es zu Kollisionen mit anderen Nutzern.<br />
-      Vorschlag: Heimteam-Gegner-Uhrzeit<br />
-      <br />
-      Auf der Startseite können durch Eingabe eines Raumnamens und Klick auf den Button "Create" die Steuerungs-URL und
-      ein QR-Code für die Raum-URL generiert werden.<br />
-      <br />
-      Die jeweiligen Teams, Trainer*innen, Zuschauer*innen können über die Raum-URL oder den QR-Code dem Raum beitreten
-      und die Shotclock, die für das Spiel gilt, sehen.<br />
-      Die Shotclock kann auf allen Endgeräten mit Internetbrowser und Zugang zum Internet angezeigt werden.<br />
-      <br />
-      Über die Control-URL kann die Shotclock über die dort vorhandenen Buttons gesteuert werden.<br />
-      Eine mögliche Bildschirmsperre oder Bildschirmschonerzeit des Endgeräts sollte dementsprechend angepasst werden,
-      damit die Seite aktiv bleibt.<br />
-      Die Audioausgabe (Piepton) bei Ablauf der Uhr ist aus technischen Gründen nur möglich, wenn vom Nutzer mit der
-      Seite interagiert wird.<br />
-      Also entweder auf der Steuerungs-Seite oder auf der Raum-Seite, wenn dort einmal irgendwo in die Seite geklickt
-      wird.<br />
-      <br />
-      Es empfiehlt sich einen Lautsprecher (z.B. Bluetooth-Box) an das Gerät, auf dem die Shotclock gesteuert wird,
-      anzuschließen um von dort den Piepton für alle Anwesenden abzuspielen.<br />
+    <!-- Info Modal -->
+    <div id="infoModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">Info / How To Online Shotclock</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Willkommen auf der DLaxV Online Shot Clock Seite!
+            <br />
+            Hier können Räume erstellt werden in denen allen Nutzern im selben Raum die gleiche Shotclockzeit angezeigt
+            wird.
+            <br />
+            Der Raumname muss eindeutig gewählt werden, sonst kommt es zu Kollisionen mit anderen Nutzern.
+            Vorschlag: <b>Heimteam-Gegner-Uhrzeit</b>
+
+            <br /><br />
+            Auf der Startseite kann durch Eingabe eines Raumnamens und Klick auf den Button <b>Create Room</b> ein Raum
+            erstellt werden.
+            Folgende Informationen werden anschließend angezeigt:
+            <ul>
+              <li>Button zum Öffnen des Raums</li>
+              <li>Button zum Kopieren der Raum-URL</li>
+              <li>Button zum Öffnen Steuerungseite des Raums</li>
+              <li>Button zum Kopieren der Steuerungs-URL</li>
+              <li>QR-Code zur Raum-URL</li>
+            </ul>
+            Die jeweiligen Teams, Trainer*innen, Zuschauer*innen können über die Raum-URL oder den QR-Code dem Raum
+            beitreten und die Shotclock, die für das Spiel gilt, sehen.
+            Die Shotclock kann auf allen Endgeräten mit Internetbrowser und Zugang zum Internet angezeigt werden.
+
+            <br /><br />
+            Auf der Steuerungsseite kann die Shotclock über die dort vorhandenen Buttons gesteuert werden.
+            <br />
+            Eine mögliche Bildschirmsperre oder Bildschirmschonerzeit des Endgeräts sollte dementsprechend angepasst
+            werden, damit die Seite aktiv bleibt.
+
+            <br /><br />
+            Die Audioausgabe (Piepton) bei Ablauf der Uhr ist aus technischen Gründen nur möglich, wenn vom Nutzer mit
+            der
+            Seite interagiert wird.
+            Also entweder auf der Steuerungs-Seite oder auf der Raum-Seite, wenn dort einmal irgendwo in die Seite
+            geklickt wird.
+            <br />
+            Es empfiehlt sich einen Lautsprecher (z.B. Bluetooth-Box) an das Gerät, auf dem die Shotclock gesteuert
+            wird,
+            anzuschließen um von dort den Piepton für alle Anwesenden abzuspielen.
+
+            <hr />
+            <h3>Beispielhaftes Setup</h3>
+            <img src="img/instructions.svg" alt="Instructional image for device setup" class="w-100">
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="input" class="mb center">
-      Room: <input id="room" type="text"></input>
-      <button onclick="create()">Create</button>
-      <br /><br />
-      <span>Räume werden 24 Stunden nachdem der letzte Nutzer diesen Verlassen hat und kein weiterer Nutzer beigetreten
-        ist gelöscht</span>
-    </div>
-    <div id="qr" class="mb"></div>
-    <div id="room-url" class="mb2 center" style="display: none;">
-      <a id="url-room" href=""></a>
-      <br /><br />
-      <button onclick="copyRoomURL();">Copy room URL</button>
-    </div>
-    <div id="control-url" class="mb center" style="display: none;">
-      <span id="control-text">Controls: <br /></span>
-      <a id="url-control" href=""></a>
-      <br /><br />
-      <button onclick="openControls();">Open Controls</button>
-    </div>
-    <div id="contact">
-      Bei Fragen oder Problemen oder auch gerne für Feedback zur Nutzbarkeit oder allgemein bitte eine E-Mail an
-      <script type="text/javascript" language="javascript">
-        // Email obfuscator script 2.1 by Tim Williams, University of Arizona
-        // Random encryption key feature by Andrew Moulden, Site Engineering Ltd
-        // This code is freeware provided these four comment lines remain intact
-        // A wizard to generate this code is at http://www.jottings.com/obfuscator/
-        { coded = "z.urbhMr@wnHR6.wr"
-          key = "MpijWrqRH61Vwcylf03b49uSOtoN5TQgn8IFYKDPEBzLZk2X7heGxavAJdUmCs"
-          shift=coded.length
-          link=""
-          for (i=0; i<coded.length; i++) {
-            if (key.indexOf(coded.charAt(i))==-1) {
-              ltr = coded.charAt(i)
-              link += (ltr)
-            }
-            else {     
-              ltr = (key.indexOf(coded.charAt(i))-shift+key.length) % key.length
-              link += (key.charAt(ltr))
-            }
-          }
-        document.write("<a href='mailto:"+link+"'>"+link+"</a>")
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"></script>
+    <script src="bootstrap.bundle.min.js"></script>
+    <script type="application/javascript" src="qrcode.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        params = new URLSearchParams(window.location.search);
+        room = params.get('r');
+        if (room !== undefined && room !== null && room.trim() !== "")
+          document.getElementById("room").value = room;
+        create(false);
+      });
+
+      let createButtonTimeoutId;
+      function create(showPopover = true) {
+        var room = $('#room').val();
+        if (room !== undefined && room !== null && room.trim() !== "") {
+          // Room-Info zeigen
+          $('#room-info').removeClass('d-none');
+
+          // Popover auf Create Button deaktivieren
+          $('#createButton').popover('hide');
+
+          // Buttons und QR-Code bestücken
+          var url = createRoomURL(room);
+          setQR(url);
+          $('#url-room').attr("href", url);
+
+          var controlUrl = createControlURL(room);
+          $('#url-control').attr("href", controlUrl);
+        } else if (showPopover) {
+          clearTimeout(createButtonTimeoutId);
+          $('#createButton').popover({
+            content: "Please define a room name",
+            trigger: 'manual'
+          });
+          $('#createButton').popover('show');
+          createButtonTimeoutId = setTimeout(function () {
+            $('#createButton').popover('hide');
+          }, 3000);
         }
-      </script><noscript>Sorry, you need Javascript on to email me.</noscript>
-      senden.
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      params = new URLSearchParams(window.location.search);
-      room = params.get('r');
-      if (room !== undefined && room !== null && room.trim() !== "")
-        document.getElementById("room").value = room;
-      create();
-    }, false);
-
-    function create() {
-      var room = document.getElementById("room").value;
-      if (room !== undefined && room !== null && room.trim() !== "") {
-        var url = createRoomURL(room);
-        setQR(url);
-        document.getElementById("url-room").innerHTML = url;
-        document.getElementById("url-room").href = url;
-        document.getElementById("room-url").style.display = "block";
-
-        var controlUrl = createControlURL(room);
-        document.getElementById("url-control").innerHTML = controlUrl;
-        document.getElementById("url-control").href = controlUrl;
-
-        document.getElementById("control-url").style.display = "block";
-
-        document.getElementById("info").style.display = "none";
       }
-    }
 
-    function createRoomURL(room) {
-      return "https://shotclock.dlaxv.de/room.html?r=" + room;
-    }
-
-    function createControlURL(room) {
-      return "https://shotclock.dlaxv.de/control.html?r=" + room;
-    }
-
-    var qrcode;
-    function setQR(url) {
-      var size = Math.min(window.innerWidth, window.innerHeight) / 3;
-      if (qrcode === undefined) {
-        qrcode = new QRCode("qr", {
-          text: url,
-          width: size,
-          height: size,
-          colorDark: "#000000",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H
-        });
-      } else {
-        qrcode.makeCode(url);
+      function copyRoomURL() {
+        var room = $('#room').val();
+        if (room !== undefined && room !== null && room.trim() !== "") {
+          navigator.clipboard.writeText(createRoomURL(room));
+          $('#copy-url-room').popover({
+            content: "Copied!",
+          });
+          $('#copy-url-room').popover('show');
+          setTimeout(function () {
+            $('#copy-url-room').popover('hide');
+          }, 1000);
+        }
       }
-    }
 
-    function copyRoomURL() {
-      var room = document.getElementById("room").value;
-      if (room !== undefined && room !== null && room.trim() !== "")
-        copyToClipboard(createRoomURL(room));
-    }
+      function copyControlURL() {
+        var room = $('#room').val();
+        if (room !== undefined && room !== null && room.trim() !== "") {
+          navigator.clipboard.writeText(createControlURL(room));
+          $('#copy-url-control').popover({
+            content: "Copied!",
+          });
+          $('#copy-url-control').popover('show');
+          setTimeout(function () {
+            $('#copy-url-control').popover('hide');
+          }, 1000);
+        }
+      }
 
-    function openControls() {
-      var room = document.getElementById("room").value;
-      if (room !== undefined && room !== null && room.trim() !== "")
-        window.location.href = createControlURL(room);
-    }
+      function createRoomURL(room) {
+        return "https://shotclock.dlaxv.de/room.html?r=" + room;
+      }
 
-    const copyToClipboard = str => {
-      const el = document.createElement('textarea');
-      el.value = str;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-    };
-  </script>
+      function createControlURL(room) {
+        return "https://shotclock.dlaxv.de/control.html?r=" + room;
+      }
+
+      var qrcode;
+      function setQR(url) {
+        var size = Math.min(window.innerWidth, window.innerHeight) / 4;
+        if (qrcode === undefined) {
+          qrcode = new QRCode("qr", {
+            text: url,
+            width: size,
+            height: size,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+          });
+        } else {
+          qrcode.makeCode(url);
+        }
+      }
+
+      function openControls() {
+        var room = $('#room').val();
+        if (room !== undefined && room !== null && room.trim() !== "")
+          window.location.href = createControlURL(room);
+      }
+    </script>
 </body>
 
 </html>
