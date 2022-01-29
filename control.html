@@ -47,8 +47,8 @@
 
   #control #startstop,
   #control #reset {
-    width: 25vmax;
-    height: 15vmin;
+    width: 15vmax;
+    height: 15vmax;
     font-size: 5vmin;
   }
 
@@ -61,6 +61,32 @@
   .red {
     color: red;
   }
+
+  #startstop {
+    border: 2px solid black;
+  	border-radius: 50%;
+	  margin-top: 1em;
+  }
+
+  #reset {
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(105, 105, 105, 0.3);
+    border: 2px solid black;
+	  border-radius: 50%;
+	  box-shadow: 0px 0px 0px 2px rgba(105, 105, 105, 0.3);
+  }
+  
+  .button-red {
+    color: rgba(255, 165, 0, 1);
+    background-color: rgba(255, 165, 0, 0.2);
+    box-shadow: 0px 0px 0px 2px rgba(255, 165, 0, 0.2);
+  }
+
+  .button-green {
+    color: rgba(0, 255, 0, 1);
+    background-color: rgba(0, 255, 0, 0.2);
+	  box-shadow: 0px 0px 0px 2px rgba(0, 255, 0, 0.2);
+  }
 </style>
 
 <body>
@@ -68,7 +94,7 @@
     <span id="shotclock"></span>
     <div id="control">
       <button id="startstop" onclick="startstop();">START/STOP</button>
-      <br /><br /><br /><br /><br />
+      <br /><br /><br /><br />
       <button id="reset" onclick="reset();">RESET</button>
       <br /><br /><br /><br />
       <button id="startpage" onclick="startpage();">Startpage</button>
@@ -98,6 +124,7 @@
     ws.onmessage = function (event) {
       var id = event.data.substring(0, 1);
       var data = event.data.substring(2).includes(";") ? event.data.substring(2).split(";") : [event.data.substring(2)];
+      console.log(event.data);
       switch (id) {
         case "t":
           var shotclock = data[1];
@@ -108,6 +135,18 @@
             alarm();
           else
             deactivateAlarm();
+          break;
+        case "r":
+          var status = parseInt(data[0]);
+          if (status) {
+            document.getElementById('startstop').innerHTML = "STOP";
+            document.getElementById('startstop').classList.add("button-red");
+            document.getElementById('startstop').classList.remove("button-green");
+          } else {
+            document.getElementById('startstop').innerHTML = "START";
+            document.getElementById('startstop').classList.add("button-green");
+            document.getElementById('startstop').classList.remove("button-red");
+          }
           break;
       }
     }

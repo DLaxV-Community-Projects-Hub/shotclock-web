@@ -26,6 +26,7 @@ async def time(websocket, path):
     rooms[room]['active'] = True
     log(room + " reactivated")
   rooms[room]['clients'].add(websocket)
+  await websocket.send('r;' + ("1" if rooms[room]['running'] else "0"))
   await sendTimeToClient(websocket, room)
   await sendScoreToClient(websocket, room)
 
@@ -33,17 +34,17 @@ async def time(websocket, path):
   try:
     while True:
       if websocket.state == State.CLOSED:
-        disconnected(websocket, room)
+        await disconnected(websocket, room)
         break
       async for message in websocket:
         log(getName(websocket) + '@' + room + ': ' + message)
         if message == 'start':
           await startTimer(room)
         elif message == 'stop':
-          stopTimer(room)
+          await stopTimer(room)
         elif message == 'startstop':
           if rooms[room]['running']:
-            stopTimer(room)
+            await stopTimer(room)
           else:
             await startTimer(room)
         elif message == 'reset':
@@ -67,21 +68,21 @@ async def time(websocket, path):
           time = int(pData[3])
           await addPenalty(room, team, player, time)
   except:
-    disconnected(websocket, room)
+    await disconnected(websocket, room)
 
 def getName(ws):
   if ws.request_headers['X-Real-IP']:
     return ws.request_headers['X-Real-IP']
   return websocket.remote_address[0]
 
-def disconnected(ws, room):
+async def disconnected(ws, room):
   if ws in rooms[room]['clients']:
     log(getName(ws) + ' left ' + room)
     clients = rooms[room]['clients'].copy()
     clients.remove(ws)
     rooms[room]['clients'] = clients
     if len(rooms[room]['clients']) == 0 and rooms[room]['active']:
-      stopTimer(room)
+      await stopTimer(room)
       rooms[room]['active'] = False
       log(room + ' deactivated')
       Timer(86400.0, deleteRoom, (room,)).start()
@@ -98,6 +99,8 @@ async def startTimer(room):
     rooms[room]['running'] = True
     thread = Thread(target=asyncio.run, args=(timerThread(room),))
     thread.start()
+  for ws in rooms[room]['clients']:
+    await ws.send('r;1')
 
 async def timerThread(room):
   while room in rooms and rooms[room]['running']:
@@ -128,8 +131,10 @@ async def timerThread(room):
     # Eine Sekunde minus Methodenlaufzeit bis zum nächsten Aufruf
     await asyncio.sleep(1 - diff)
 
-def stopTimer(room):
+async def stopTimer(room):
   rooms[room]['running'] = False
+  for ws in rooms[room]['clients']:
+    await ws.send('r;0')
 
 async def resetTimer(room):
   rooms[room]['shotclock'] = shotclockStart
@@ -158,7 +163,7 @@ async def sendTimeToClient(ws, room):
     await ws.send('t;' + str(game) + ';' + str(shotclock))
     await sendPenaltiesToClient(ws, room)
   except:
-    disconnected(ws, room)
+    await disconnected(ws, room)
 
 async def sendPenaltiesToClient(ws, room):
   try:
@@ -171,13 +176,13 @@ async def sendPenaltiesToClient(ws, room):
           msg = msg + ';' + str(p['team']) + ':' + str(p['player']) + ':' + str(max(p['time'], 0))
       await ws.send(msg)
   except:
-    disconnected(ws, room)
+    await disconnected(ws, room)
 
 async def sendScoreToClient(ws, room):
   try:
     await ws.send('s;' + str(rooms[room]['score'][0]) + ';' + str(rooms[room]['score'][1]))
   except:
-    disconnected(ws, room)
+    await disconnected(ws, room)
 
 def log(msg):
   print(str(datetime.now()) + ": " + msg)
