@@ -5,10 +5,11 @@
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DLaxV Shotclock</title>
+  <title>DLaxV Shot Clock</title>
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
-  <link href="bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/fontawesome-all.min.css" rel="stylesheet">
   <style>
     body {
       background: rgb(158, 158, 158);
@@ -30,8 +31,8 @@
   <div class="p-5 text-center">
     <div class="d-flex flex-column justify-content-center align-items-center h-100">
       <div class="text-white mb-2">
-        <h1 class="mb-3">DLaxV Shotclock</h1>
-        <h5 class="mb-4">Free & Open Source online Shotclock application</h5>
+        <h1 class="mb-3">DLaxV Shot Clock</h1>
+        <h5 class="mb-4">Free & Open Source online shot clock application</h5>
         <input id="room" type="text" class="form-control" placeholder="Room Name">
         <select name="lang" id="lang" class="btn btn-outline-light btn-lg m-2">
           <option value="en">🇺🇸</option>
@@ -50,17 +51,42 @@
       <div id="room-info" class="mb-2 d-flex flex-row d-none">
         <div id="qr" class="mx-1 my-1"></div>
         <div id="room-buttons" class="d-flex flex-column justify-content-around mx-1">
-          <div class="d-flex flex-column">
-            <a id="url-room" class="btn btn-outline-light btn-md my-1" role="button" target="_blank"
-              href="https://shotclock.dlaxv.de/room.html?r=">Open Room</a>
-            <button id="copy-url-room" class="btn btn-outline-light btn-md" role="button" onclick="copyRoomURL();">Copy
-              Room URL</button>
+          <div class="d-flex">
+            <div class="d-flex flex-column">
+              <a id="url-room" class="btn btn-outline-light btn-md my-1" role="button" target="_blank"
+                href="https://shotclock.dlaxv.de/room.html?r=">
+                <span class="lang-en d-none">Open Room</span>
+                <span class="lang-de d-none">Raum öffnen</span>
+              </a>
+              <button id="copy-url-room" class="btn btn-outline-light btn-md" role="button" onclick="copyRoomURL();">
+                <span class="lang-en d-none">Copy Room URL</span>
+                <span class="lang-de d-none">Raum-URL kopieren</span>
+              </button>
+            </div>
+            <div class="d-flex flex-column justify-content-center ms-2">
+              <div id="roomUrlInfo" onclick="showRoomUrlInfo()">
+                <i class="fas fa-info-circle fa-2x text-white"></i>
+              </div>
+            </div>
           </div>
-          <div class="d-flex flex-column">
-            <a id="url-control" class="btn btn-outline-light btn-md my-1" role="button" target="_blank"
-              href="https://shotclock.dlaxv.de/control.html?r=">Open Control</a>
-            <button id="copy-url-control" class="btn btn-outline-light btn-md" role="button"
-              onclick="copyControlURL();">Copy Control URL</button>
+          <div class="d-flex">
+            <div class="d-flex flex-column">
+              <a id="url-control" class="btn btn-outline-light btn-md my-1" role="button" target="_blank"
+                href="https://shotclock.dlaxv.de/control.html?r=">
+                <span class="lang-en d-none">Open Control</span>
+                <span class="lang-de d-none">Steuerung öffnen</span>
+              </a>
+              <button id="copy-url-control" class="btn btn-outline-light btn-md" role="button"
+                onclick="copyControlURL();">
+                <span class="lang-en d-none">Copy Control URL</span>
+                <span class="lang-de d-none">Steuerungs-URL kopieren</span>
+              </button>
+            </div>
+            <div class="d-flex flex-column justify-content-center ms-2">
+              <div id="controlUrlInfo" onclick="showControlUrlInfo()">
+                <i class="fas fa-info-circle fa-2x text-white"></i>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -72,11 +98,12 @@
           </div>
           <div id="logo-worldlacrosse" class="mx-3">
             <a href="https://worldlacrosse.sport/" target="_blank"><img src="img/logo-worldlacrosse.svg"
-                alt="Logo World Lacrosse"></a </div>
+                alt="Logo World Lacrosse"></a>
           </div>
         </div>
       </div>
     </div>
+  </div>
   </div>
 
   <!-- Info Modal -->
@@ -85,14 +112,13 @@
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content" class="lang-de">
         <div class="modal-header">
-          <h5 class="modal-title" id="infoModalLabel">Info / How To Online Shotclock</h5>
+          <h5 class="modal-title" id="infoModalLabel">Info / How To Online Shot Clock</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           Willkommen auf der DLaxV Online Shot Clock!
           <br />
-          Hier können Räume erstellt werden in denen allen Nutzern im selben Raum die gleiche Shotclockzeit angezeigt
-          wird.
+          Hier können Räume erstellt werden in denen allen Nutzern im selben Raum die gleiche Zeit angezeigt wird.
           <br />
           Der Raumname muss eindeutig gewählt werden, sonst kommt es zu Kollisionen mit anderen Nutzern.
           Vorschlag: <b>Heimteam-Gegner-Uhrzeit</b>
@@ -109,11 +135,11 @@
             <li>QR-Code zur Raum-URL</li>
           </ul>
           Die jeweiligen Teams, Trainer*innen, Zuschauer*innen können über die Raum-URL oder den QR-Code dem Raum
-          beitreten und die Shotclock, die für das Spiel gilt, sehen.
-          Die Shotclock kann auf allen Endgeräten mit Internetbrowser und Zugang zum Internet angezeigt werden.
+          beitreten und die Shot Clock, die für das Spiel gilt, sehen.
+          Die Shot Clock kann auf allen Endgeräten mit Internetbrowser und Zugang zum Internet angezeigt werden.
 
           <br /><br />
-          Auf der Steuerungsseite kann die Shotclock über die dort vorhandenen Buttons gesteuert werden.
+          Auf der Steuerungsseite kann die Shot Clock über die dort vorhandenen Buttons gesteuert werden.
           <br />
           Eine mögliche Bildschirmsperre oder Bildschirmschonerzeit des Endgeräts sollte dementsprechend angepasst
           werden, damit die Seite aktiv bleibt.
@@ -125,7 +151,7 @@
           Also entweder auf der Steuerungs-Seite oder auf der Raum-Seite, wenn dort einmal irgendwo in die Seite
           geklickt wird.
           <br />
-          Es empfiehlt sich einen Lautsprecher (z.B. Bluetooth-Box) an das Gerät, auf dem die Shotclock gesteuert
+          Es empfiehlt sich einen Lautsprecher (z.B. Bluetooth-Box) an das Gerät, auf dem die Shot Clock gesteuert
           wird,
           anzuschließen um von dort den Piepton für alle Anwesenden abzuspielen.
 
@@ -141,7 +167,7 @@
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content" class="lang-en">
         <div class="modal-header">
-          <h5 class="modal-title" id="infoModalLabel">Info / How To Online Shotclock</h5>
+          <h5 class="modal-title" id="infoModalLabel">Info / How To Online Shot Clock</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -164,11 +190,11 @@
             <li>QR code for the room URL</li>
           </ul>
           The respective teams, coaches and spectators can join the room via the room URL or the QR code and see the
-          shotclock that applies to the game. The shotclock can be viewed on any device with an internet browser and
+          shot clock that applies to the game. The shot clock can be viewed on any device with an internet browser and
           access to the internet.
 
           <br /><br />
-          On the control page, the Shotclock can be controlled using the buttons available there.
+          On the control page, the shot clock can be controlled using the buttons available there.
           <br />
           A possible screen lock or screen saver time of the end device should be adjusted accordingly so that the page
           remains active.
@@ -179,7 +205,7 @@
           So either on the control page or on the room page, the beep will sound only if the user clicks/touches
           somewhere in the page once.
           <br />
-          It is recommended to connect a loudspeaker (e.g. Bluetooth box) to the device on which the Shotclock is
+          It is recommended to connect a loudspeaker (e.g. Bluetooth box) to the device on which the shot clock is
           controlled in order to play the beep from there for everyone present.
 
           <hr />
@@ -193,9 +219,11 @@
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
-  <script src="bootstrap.bundle.min.js"></script>
-  <script type="application/javascript" src="qrcode.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script type="application/javascript" src="js/qrcode.min.js"></script>
   <script>
+    let lang;
+
     $(document).ready(function () {
       params = new URLSearchParams(window.location.search);
       room = params.get('r');
@@ -203,7 +231,7 @@
         document.getElementById("room").value = room;
       create(false);
 
-      let lang = params.get("lang");
+      lang = params.get("lang");
       if (lang === "de") {
         $('#lang').val("de");
         $('#infoButton').attr("data-bs-target", "#infoModalDE")
@@ -257,6 +285,38 @@
           $('#createButton').popover('hide');
         }, 3000);
       }
+    }
+
+    function showControlUrlInfo() {
+      let text;
+      if (lang === "de")
+        text = "Auf dieser Seite kann der User die Shot Clock steuern";
+      else
+        text = "This page allows the user to control the shot clock";
+      $('#controlUrlInfo').popover({
+        content: text,
+        trigger: 'manual'
+      });
+      $('#controlUrlInfo').popover('show');
+      createButtonTimeoutId = setTimeout(function () {
+        $('#controlUrlInfo').popover('hide');
+      }, 10000);
+    }
+
+    function showRoomUrlInfo() {
+      let text;
+      if (lang === "de")
+        text = "Auf dieser Seite können die User die Shot Clock live verfolgen";
+      else
+        text = "This page allows users to view the shot clock live";
+      $('#roomUrlInfo').popover({
+        content: text,
+        trigger: 'manual'
+      });
+      $('#roomUrlInfo').popover('show');
+      createButtonTimeoutId = setTimeout(function () {
+        $('#roomUrlInfo').popover('hide');
+      }, 10000);
     }
 
     function copyRoomURL() {
