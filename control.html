@@ -117,6 +117,17 @@
       alert("No room defined")
   }, false);
 
+  function keyPressHandler(e) {
+    if (e.keyCode === 32 || e.keyCode === 13) { // Space/Enter
+      startstop();
+      e.preventDefault();
+    } else if (e.keyCode === 67 || e.keyCode === 77 || e.keyCode == 8) { // M/C/Backspace
+      reset();
+      e.preventDefault();
+    }
+  }
+  document.addEventListener('keydown', keyPressHandler, false);
+
   var ws;
 
   function join(room = undefined) {
