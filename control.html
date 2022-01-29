@@ -219,13 +219,13 @@
       setTimeout(() => {
         audio.play();
         audio.pause();
+        audio.load();
       }, 100);
       audioInitialized = true;
     }
   }, true);
 
   function beep() {
-    audio.load();
     audio.play();
     setTimeout(function () {
       stopBeep()
