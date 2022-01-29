@@ -212,9 +212,20 @@
     document.getElementById('shotclock').classList.remove('red');
   }
 
-  var audio;
+  var audioInitialized = false;
+  var audio = new Audio("beep.mp3");
+  document.body.addEventListener('click', function () {
+    if (!audioInitialized) {
+      setTimeout(() => {
+        audio.play();
+        audio.pause();
+      }, 100);
+      audioInitialized = true;
+    }
+  }, true);
+
   function beep() {
-    audio = new Audio("beep.mp3");
+    audio.load();
     audio.play();
     setTimeout(function () {
       stopBeep()
