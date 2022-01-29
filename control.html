@@ -101,6 +101,8 @@
       switch (id) {
         case "t":
           var shotclock = data[1];
+          if (shotclock < 10)
+            shotclock = "0" + shotclock;
           document.getElementById('shotclock').innerHTML = shotclock;
           if (shotclock == 0)
             alarm();
