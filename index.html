@@ -261,6 +261,8 @@
     function create(showPopover = true) {
       var room = $('#room').val();
       if (room !== undefined && room !== null && room.trim() !== "") {
+        history.pushState({}, null, replaceUrlParam(window.location.href, "r", room));
+
         // Room-Info zeigen
         $('#room-info').removeClass('d-none');
 
